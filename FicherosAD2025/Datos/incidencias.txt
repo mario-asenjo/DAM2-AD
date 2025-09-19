@@ -1,0 +1,4 @@
+2025-09-16;14:01:00;excepción test1;manolo
+2025-08-15;15:03:04;excepción test2;david
+2025-09-16;14:01:30;excepción test3;jesus
+2025-09-16;14:19:20;excepsción test4;manolo
