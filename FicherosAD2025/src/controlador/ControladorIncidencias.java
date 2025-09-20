@@ -1,29 +1,62 @@
 package controlador;
 
-
+import excepciones.NumeroNoValidoException;
+import modelo.Incidencia;
+import modelo.ListaIncidencia;
+import repositorio.Fichero;
+import repositorio.RepoIncidencias;
+import utilidades.Colores;
+import excepciones.UsuarioNoValidoException;
+import utilidades.UtilidadesIncidencias;
+import utilidades.UtilidadesUsuarios;
 import vista.Consola;
-import vista.Escaner;
+
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class ControladorIncidencias {
-    public static String pedirUsuario() {
-        String usuario;
-        boolean userFlag;
+    static boolean EXIT = false;
 
-        userFlag = true;
-        usuario = "";
-        while (userFlag || usuario.isEmpty()) {
-            try {
-                usuario = Escaner.pedirString("Introduce tu nombre de usuario:");
-                userFlag = false;
-            } catch (IllegalArgumentException e) {
-                Consola.mostrarExcepcion(e);
-            }
-        }
-        return (usuario);
-    }
+    static Fichero<Incidencia> repo = new RepoIncidencias("Datos/incidencias.txt");
+
     public static void iniciar() {
-        String usuario;
+        String  usuario;
+        ListaIncidencia miLista;
+        int     opcionMenuPrincipal;
 
-        usuario = pedirUsuario();
+        usuario = UtilidadesUsuarios.pedirUsuario();
+        Consola.mostrarFrase("Usuario introducido correctamente.\n", Colores.AMARILLO);
+        while (!EXIT) {
+            try {
+                miLista = new ListaIncidencia(repo.cargar());
+                Consola.mostrarMenu(List.of("Insertar dato.\n", "Visualizar incidencias.\n", "Salir del programa.\n"));
+                opcionMenuPrincipal = UtilidadesIncidencias.pedirOpcionMenuPrincipal();
+                switch (opcionMenuPrincipal) {
+                    case 1:
+                        UtilidadesIncidencias.insertarDato();
+                        break;
+                    case 2:
+                        UtilidadesIncidencias.visualizarIncidencias(miLista);
+                        break;
+                    case 3:
+                        EXIT = true;
+                        break;
+                }
+            } catch (IOException e) {
+                Consola.mostrarExcepcion(e);
+            } catch (NumeroNoValidoException e) {
+                //Logica de ficheros
+                Incidencia incidencia = new Incidencia(LocalDateTime.now(), e.getMessage(), usuario);
+                Consola.mostrarExcepcion(e);
+                try {
+                    repo.guardar(incidencia);
+                } catch (IOException y) {
+                    Consola.mostrarExcepcion(y);
+                }
+            }
+
+        }
     }
 }
