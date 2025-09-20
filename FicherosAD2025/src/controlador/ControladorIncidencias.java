@@ -27,11 +27,11 @@ public class ControladorIncidencias {
         int     opcionMenuPrincipal;
 
         usuario = UtilidadesUsuarios.pedirUsuario();
-        Consola.mostrarFrase("Usuario introducido correctamente.\n", Colores.AMARILLO);
+        Consola.mostrarFraseEndl("Usuario introducido correctamente.", Colores.AMARILLO);
         while (!EXIT) {
             try {
                 miLista = new ListaIncidencia(repo.cargar());
-                Consola.mostrarMenu(List.of("Insertar dato.\n", "Visualizar incidencias.\n", "Salir del programa.\n"));
+                Consola.mostrarMenu(List.of("Insertar dato.", "Visualizar incidencias.", "Salir del programa."));
                 opcionMenuPrincipal = UtilidadesIncidencias.pedirOpcionMenuPrincipal();
                 switch (opcionMenuPrincipal) {
                     case 1:

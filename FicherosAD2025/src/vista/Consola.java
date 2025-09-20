@@ -13,14 +13,22 @@ public class Consola {
         System.out.printf("%s", color.aplicar_colores("[+] " + frase));
     }
 
+    public static void mostrarFraseEndl(String frase) {
+        mostrarFrase(frase + "\n");
+    }
+
+    public static void mostrarFraseEndl(String frase, Colores color) {
+        mostrarFrase(frase + "\n", color);
+    }
+
     public static void mostrarExcepcion(Exception e) {
-        System.out.printf("%s\n", Colores.ROJO.aplicar_colores("[!] Excepcion: " + e.getMessage()));
+        mostrarFraseEndl("[!] Excepcion: " + e.getMessage(), Colores.ROJO);
     }
 
     public static void mostrarMenu(List<String> opciones) {
-        mostrarFrase("[#] OPCIONES\n", Colores.AMARILLO);
+        mostrarFraseEndl("[#] OPCIONES", Colores.AMARILLO);
         for (int i = 1; i <= opciones.size(); i++) {
-            mostrarFrase(String.format("[%d] %s", i, opciones.get(i - 1)), Colores.AMARILLO);
+            mostrarFraseEndl(String.format("[%d] %s", i, opciones.get(i - 1)), Colores.AMARILLO);
         }
     }
 }
