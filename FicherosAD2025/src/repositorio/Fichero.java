@@ -20,6 +20,8 @@ public class Fichero<T> implements Repo<T> {
     @Override
     public void guardar(T objeto) throws IOException {
         try (BufferedWriter myBW = new BufferedWriter(new FileWriter(archivo, true))) {
+            if (archivo.length() > 0)
+                myBW.write("\n");
             myBW.write(serializador.apply(objeto));
             myBW.newLine();
         }
