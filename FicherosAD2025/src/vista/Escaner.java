@@ -32,4 +32,8 @@ public class Escaner {
     public static void limpiarEscaner() {
         sc.nextLine();
     }
+
+    public static boolean hasNext() {
+        return sc.hasNext();
+    }
 }

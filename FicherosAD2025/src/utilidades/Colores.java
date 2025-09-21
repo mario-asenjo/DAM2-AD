@@ -31,11 +31,11 @@ public enum Colores {
     }
 
     public String aplicar_colores(String texto) {
-        return this.codigo + texto + RESET.codigo;
+        return (this.codigo + texto + RESET.codigo);
     }
 
     @Override
     public String toString() {
-        return this.codigo;
+        return (this.codigo);
     }
 }

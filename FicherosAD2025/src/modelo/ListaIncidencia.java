@@ -12,7 +12,9 @@ public class ListaIncidencia {
     }
 
     public List<Incidencia> buscarPorUsuario(String usuario) {
-        List<Incidencia> listaRetorno = new ArrayList<>();
+        List<Incidencia> listaRetorno;
+
+        listaRetorno = new ArrayList<>();
         for (Incidencia incidencia : incidencias) {
             if (incidencia.getUsername().equalsIgnoreCase(usuario))
                 listaRetorno.add(incidencia);
@@ -22,9 +24,12 @@ public class ListaIncidencia {
     }
 
     public List<Incidencia> buscarPorRangoFechas(LocalDate desde, LocalDate hasta) {
-        List<Incidencia> listaRetorno = new ArrayList<>();
+        List<Incidencia> listaRetorno;
+
+        listaRetorno = new ArrayList<>();
         for (Incidencia incidencia : incidencias) {
-            if (incidencia.getDateTime().isAfter(desde.atStartOfDay()) && incidencia.getDateTime().isBefore(hasta.atStartOfDay()))
+            if (incidencia.getDateTime().isAfter(desde.atStartOfDay())
+                    && incidencia.getDateTime().isBefore(hasta.plusDays(1).atStartOfDay()))
                 listaRetorno.add(incidencia);
         }
         return (listaRetorno);
@@ -35,6 +40,6 @@ public class ListaIncidencia {
     }
 
     public List<Incidencia> obtenerTodas() {
-        return incidencias;
+        return (incidencias);
     }
 }

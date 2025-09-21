@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.function.Function;
 
 public class Fichero<T> implements Repo<T> {
-    private final File archivo;
+    private final File  archivo;
     Function<String, T> parseador;
     Function<T, String> serializador;
 
@@ -20,8 +20,6 @@ public class Fichero<T> implements Repo<T> {
     @Override
     public void guardar(T objeto) throws IOException {
         try (BufferedWriter myBW = new BufferedWriter(new FileWriter(archivo, true))) {
-            if (archivo.length() > 0)
-                myBW.write("\n");
             myBW.write(serializador.apply(objeto));
             myBW.newLine();
         }
@@ -29,15 +27,16 @@ public class Fichero<T> implements Repo<T> {
 
     @Override
     public List<T> cargar() throws IOException {
-        List<T> lista = new ArrayList<>();
-        String linea;
+        List<T> lista;
+        String  linea;
 
+        lista = new ArrayList<>();
         if (!archivo.exists())
             return (lista);
         try (BufferedReader myBR = new BufferedReader(new FileReader(archivo))) {
             while ((linea = myBR.readLine()) != null)
                 lista.add(parseador.apply(linea));
         }
-        return lista;
+        return (lista);
     }
 }

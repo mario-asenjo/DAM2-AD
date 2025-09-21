@@ -1,5 +1,6 @@
 package utilidades;
 
+import excepciones.FechaNoValidaException;
 import excepciones.NumeroNoValidoException;
 import excepciones.UsuarioNoValidoException;
 import modelo.Incidencia;
@@ -25,18 +26,22 @@ public class UtilidadesIncidencias {
 
         opcion = 0;
         try {
+            if (Escaner.hasNext())
+                Escaner.limpiarEscaner();
             opcion = Escaner.pedirEntero("Introduce una opcion (1-3): ");
             validarOpcionMenuPrincipal(opcion);
-            //Las excepciones que propaga este metodo se propagan automáticamente con el throws?
         } catch (InputMismatchException e) {
             propagarNumeroNoValido("La opcion del menu principal debe ser un numero entero valido", opcion);
+            Escaner.limpiarEscaner();
         }
         return (opcion);
     }
 
     private static void validarOpcionMenuPrincipal(int numero) throws NumeroNoValidoException {
-        if (numero < 1 || numero > 3)
+        if (numero < 1 || numero > 3) {
             propagarNumeroNoValido("La opcion del menu principal debe ser entre 1 y 3", numero);
+            Escaner.limpiarEscaner();
+        }
     }
 
     public static void insertarDato() throws NumeroNoValidoException {
@@ -46,7 +51,6 @@ public class UtilidadesIncidencias {
         try {
             dato = Escaner.pedirEntero("Introduce un numero entero positivo multiplo de 3: ");
             validarDatoNumerico(dato);
-            //Las excepciones que propaga este metodo se propagan automáticamente con el throws?
         } catch (InputMismatchException e) {
             propagarNumeroNoValido("El dato debe ser un entero valido", dato);
             Escaner.limpiarEscaner();
@@ -60,11 +64,11 @@ public class UtilidadesIncidencias {
             propagarNumeroNoValido("El dato debe ser múltiplo de tres", numero);
     }
 
-    public static void visualizarIncidencias(ListaIncidencia listaIncidencias) throws NumeroNoValidoException {
+    public static void visualizarIncidencias(ListaIncidencia listaIncidencias) throws UsuarioNoValidoException, NumeroNoValidoException, FechaNoValidaException, InputMismatchException {
         int opcion;
 
         opcion = 0;
-        Consola.mostrarMenu(List.of("Buscar por usuario.\n", " Buscar por rango de fecha.\n"));
+        Consola.mostrarMenu(List.of("Buscar por usuario.", "Buscar por rango de fecha."));
         try {
             opcion = Escaner.pedirEntero("Introduce una opcion (1-2): ");
             validarOpcionVisualizacion(opcion);
@@ -86,9 +90,9 @@ public class UtilidadesIncidencias {
             propagarNumeroNoValido("La opcion de visualizacion debe ser entre 1 y 2", numero);
     }
 
-    private static void buscarPorUsuario(ListaIncidencia listaIncidencias) {
-        String usuario;
-        List<Incidencia> listaFiltrada;
+    private static void buscarPorUsuario(ListaIncidencia listaIncidencias) throws UsuarioNoValidoException {
+        String              usuario;
+        List<Incidencia>    listaFiltrada;
 
         usuario = UtilidadesUsuarios.pedirUsuario();
         listaFiltrada = listaIncidencias.buscarPorUsuario(usuario);
@@ -96,10 +100,10 @@ public class UtilidadesIncidencias {
             Consola.mostrarFrase(inicidencia.toString() + "\n", Colores.VERDE);
     }
 
-    private static void buscarPorRangoFechas(ListaIncidencia listaIncidencias) {
-        LocalDate desde;
-        LocalDate hasta;
-        List<Incidencia> listaFiltrada;
+    private static void buscarPorRangoFechas(ListaIncidencia listaIncidencias) throws FechaNoValidaException {
+        LocalDate           desde;
+        LocalDate           hasta;
+        List<Incidencia>    listaFiltrada;
 
         desde = UtilidadesFechas.pedirFecha("Introduce la fecha inicial (yyyy/mm/dd): ");
         hasta = UtilidadesFechas.pedirFecha("Introduce la fecha final: (yyyy/mm/dd): ");
