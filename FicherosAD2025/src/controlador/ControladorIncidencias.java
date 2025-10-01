@@ -66,9 +66,11 @@ public class ControladorIncidencias {
                         switch (opcionVisualizacion) {
                             case 1:
                                 usuarioBusqueda = Escaner.pedirString("Introduce un usuario a buscar: ");
-                                listaFiltrada = listaIncidencias.buscarPorUsuario(usuarioBusqueda);
-                                for (Incidencia incidencia : listaFiltrada) {
-                                    Consola.mostrarFraseEndl(incidencia.toString(), Colores.VERDE);
+                                if (listaIncidencias != null) {
+                                    listaFiltrada = listaIncidencias.buscarPorUsuario(usuarioBusqueda);
+                                    for (Incidencia incidencia : listaFiltrada) {
+                                        Consola.mostrarFraseEndl(incidencia.toString(), Colores.VERDE);
+                                    }
                                 }
                                 break;
                             case 2:
@@ -76,22 +78,27 @@ public class ControladorIncidencias {
                                 Validaciones.validarFecha(fechaBusquedaInicial, "^[0-9]{4}/(?:(?:0[13578]|1[02])/(?:0[1-9]|[12][0-9]|3[01])|(?:0[469]|11)/(?:0[1-9]|[12][0-9]|30)|02/(?:0[1-9]|1[0-9]|2[0-9]))$", 10);
                                 fechaBusquedaFinal = Escaner.pedirString("Introduce una fecha final con el siguiente formato: ");
                                 Validaciones.validarFecha(fechaBusquedaFinal, "^[0-9]{4}/(?:(?:0[13578]|1[02])/(?:0[1-9]|[12][0-9]|3[01])|(?:0[469]|11)/(?:0[1-9]|[12][0-9]|30)|02/(?:0[1-9]|1[0-9]|2[0-9]))$", 10);
-                                listaFiltrada = listaIncidencias.buscarPorRangoFechas(LocalDate.parse(fechaBusquedaInicial), LocalDate.parse(fechaBusquedaFinal));
-                                for (Incidencia incidencia : listaFiltrada) {
-                                    Consola.mostrarFraseEndl(incidencia.toString(), Colores.VERDE);
+                                if (listaIncidencias != null){
+                                    listaFiltrada = listaIncidencias.buscarPorRangoFechas(LocalDate.parse(fechaBusquedaInicial), LocalDate.parse(fechaBusquedaFinal));
+                                    for (Incidencia incidencia : listaFiltrada) {
+                                        Consola.mostrarFraseEndl(incidencia.toString(), Colores.VERDE);
+                                    }
                                 }
                         }
+                        break;
+                    case 3:
+                        Consola.mostrarFraseEndl("Has elegido salir del programa", Colores.ROJO);
+                        exit = true;
+                        break;
                 }
-            } catch (NumeroNoValidoException | UsuarioNoValidoException | FechaNoValidaException e) {
+            } catch (NullPointerException | NumeroNoValidoException | UsuarioNoValidoException | FechaNoValidaException e) {
                 Incidencia incidencia;
 
                 incidencia = new Incidencia(LocalDateTime.now(), usuario, e.getMessage());
-                if (incidencia != null) {
-                    try {
-                        servicioFichero.guardar(incidencia.toFileString());
-                    } catch (LecturaEscrituraException eLectura) {
-                        Consola.mostrarExcepcion(eLectura);
-                    }
+                try {
+                    servicioFichero.guardar(incidencia.toFileString());
+                } catch (LecturaEscrituraException eLectura) {
+                    Consola.mostrarExcepcion(eLectura);
                 }
             }
         } while (!exit);
