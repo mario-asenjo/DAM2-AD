@@ -1,6 +1,10 @@
 package vista;
 
+<<<<<<< HEAD
 import vista.Colores;
+=======
+import utilidades.Colores;
+>>>>>>> 44ac764ec9ee34501041d0ca3c22ac07871f22c0
 
 import java.util.List;
 
