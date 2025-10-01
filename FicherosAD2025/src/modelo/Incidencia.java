@@ -11,7 +11,7 @@ public class Incidencia {
 
     public Incidencia(LocalDateTime dateTime, String exceptionMessage, String username) {
         this.dateTime = dateTime;
-        this.exceptionMessage = exceptionMessage;
+        this.exceptionMessage= exceptionMessage;
         this.username = username;
         this.formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd;HH:mm:ss");
     }
@@ -44,6 +44,13 @@ public class Incidencia {
     public String toString() {
         return String.format(
                 "Date: %s, Err: %s, User: %s",
+                this.dateTime.format(this.formatter), this.exceptionMessage, this.username
+        );
+    }
+
+    public String toFileString() {
+        return String.format(
+                "%s;%s;%s",
                 this.dateTime.format(this.formatter), this.exceptionMessage, this.username
         );
     }
