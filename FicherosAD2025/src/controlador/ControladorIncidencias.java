@@ -1,6 +1,5 @@
 package controlador;
 
-<<<<<<< HEAD
 
 import excepciones.FechaNoValidaException;
 import excepciones.LecturaEscrituraException;
@@ -96,24 +95,6 @@ public class ControladorIncidencias {
                 }
             }
         } while (!exit);
-=======
-import modelo.Incidencia;
-import repositorio.Fichero;
-import repositorio.RepoIncidencias;
-import utilidades.GeneradorVisualizadorIncidencias;
-
-public class ControladorIncidencias {
-    static boolean LOGIN = false;
-    static boolean EXIT = false;
-
-    static Fichero<Incidencia>  repo = new RepoIncidencias("Datos/incidencias.txt");
-
-    public static void  iniciar() {
-        String usuario;
-
-        usuario = GeneradorVisualizadorIncidencias.login();
-        GeneradorVisualizadorIncidencias.mainLoop(repo, usuario);
->>>>>>> 44ac764ec9ee34501041d0ca3c22ac07871f22c0
     }
 
 }
