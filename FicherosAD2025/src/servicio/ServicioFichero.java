@@ -34,8 +34,7 @@ public class ServicioFichero {
         for (String x : lectura) {
             datos = x.split(";");
             incidencia = new Incidencia(LocalDateTime.parse(String.join("T", datos[0], datos[1])), datos[2], datos[3]);
-            if (incidencia != null)
-                listaRetorno.add(incidencia);
+            listaRetorno.add(incidencia);
         }
         return (listaRetorno);
     }
