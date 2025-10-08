@@ -61,13 +61,10 @@ public class Fichero {
             escritor = new BufferedWriter(archivo);
             escritor.write(linea);
         } catch (FileNotFoundException e) {
-            Consola.mostrarExcepcion(e);
             throw new LecturaEscrituraException("Error: No se encuentra el fichero en el sistema.");
         } catch (IOException e) {
-            Consola.mostrarExcepcion(e);
             throw new LecturaEscrituraException("Error: Error durante la escritura en el fichero.");
         } catch (Exception e) {
-            Consola.mostrarExcepcion(e);
             throw new LecturaEscrituraException("Error: Error inesperado en la escritura del fichero.");
         } finally {
             try {

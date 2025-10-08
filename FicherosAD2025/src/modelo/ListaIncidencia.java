@@ -11,7 +11,7 @@ public class ListaIncidencia {
         this.incidencias = new ArrayList<>(incidencias);
     }
 
-    public List<Incidencia> buscarPorUsuario(String usuario) throws NullPointerException {
+    public List<Incidencia> buscarPorUsuario(String usuario) {
         List<Incidencia> listaRetorno;
 
         listaRetorno = new ArrayList<>();
@@ -23,7 +23,7 @@ public class ListaIncidencia {
         //return incidencias.stream().filter(i -> i.getUsername().equalsIgnoreCase(usuario)).toList();
     }
 
-    public List<Incidencia> buscarPorRangoFechas(LocalDate desde, LocalDate hasta) throws NullPointerException {
+    public List<Incidencia> buscarPorRangoFechas(LocalDate desde, LocalDate hasta) {
         List<Incidencia> listaRetorno;
 
         listaRetorno = new ArrayList<>();
