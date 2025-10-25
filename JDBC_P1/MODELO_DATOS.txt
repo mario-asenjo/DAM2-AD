@@ -1,12 +1,17 @@
 CREATE TABLE PREGUNTAS (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
+	ID INT AUTO_INCREMENT PRIMARY KEY,
 	ENUNCIADO VARCHAR(200)
 );
 
 CREATE TABLE OPCION (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     TEXTO VARCHAR(100),
-    ETIQUETA ENUM('A', 'B', 'C', 'D'),
+-----
+    OPCION ENUM('A', 'B', 'C', 'D'), 
+//Esto me obliga a que el fichero venga  con  las opciones como A., B., C. etc, cuando realmente si Carlos tiene un fichero con las respuestas con  1., 2., 3., no valdría.
+//Así que cualquiera de  estas  dos opciones valdría. (Arriba, o  abajo de este comentario).
+     OPCION CHAR(1),
+-----
     CORRECTA INT(1) DEFAULT 0,
     ID_PREGUNTA INT,
     FOREIGN KEY('ID_PREGUNTA') REFERENCES PREGUNTAS('ID')

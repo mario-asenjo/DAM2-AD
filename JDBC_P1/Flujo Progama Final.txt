@@ -1,0 +1,40 @@
+PASO 4 DE PASOS_TRABAJO.TXT
+---------------------------
+nuestra función main() hace lo siguiente:
+1. Llama al controladorPreguntas.iniciar().
+iniciar() hace:
+1. Accedemos al fichero.
+2. - ¿Carlos que quiere, que leamos cada enunciado solo o que guardemos toda la información de cada pregunta en memoria?
+	¿Por ende, que quiere que guardemos en la base de datos, solo las respuestas correctas y los enunciados relacionados, o toda la información de cada pregunta, separada como tenemos en el modelo creado?
+
+	Cada pregunta tiene List<Opcion>.
+	<##POSIBLE IMPLEMENTACIÓN HASTA ESTE PUNTO##>
+	LEO EL FICHERO ENTERO Y DEVUELVO -> List<Pregunta> listaPreguntas;
+	SI EL PASO 2 TENEMOS QUE HACERLO DESDE EL PROGRAMA Y NO A MANO.
+	SI NO, ESTE PASO ESTARÁ HECHO A MANO, Y PODEMOS PROCEDER CON EL PASO 3 SUPONIENDO QUE TODOS LOS DATOS SE HAYAN INTRODUCIDO CORRECTAMENTE.
+	for (Pregunta pregunta : listaPreguntas)
+		String.format("INSERT INTO PREGUNTA (ID, ENUNCIADO) VALUES (NULL, %s)", pregunta.getEnunciado());
+
+	for (Pregunta pregunta : listaPreguntas)
+		for (Opción opción : pregunta.getOpciones())
+			String.format("INSERT INTO OPCION (ID, TEXTO, OPCION, ESCORRECTA) VALUES (NULL, %s, %c, %b)", opción.getTexto(), opción.getOpcion(), opción.getIsCorrecta());
+ACLARACIÓN.
+Imaginemos que en el fichero hay 200 preguntas. El usuario tiene que introducir un número
+	por ejemplo 10, y el programa debe devolver 10 preguntas aleatorias.
+3. Mostrar menú: Modo practica o Modo examen.
+4. Pedirle al usuario un número. -> 10
+5. Guardar una lista de 10 preguntas aleatorias.
+MIENTRAS HAYA PREGUNTAS EN LA LISTA.
+	1. El programa devuelve una pregunta con sus opciones.
+	2. (una a una). Se le pide la opción.
+	3. (modo examen) Contrastamos con la BBDD y guardamos resultado en memoria.
+	4. (modo practica) Contrastamos con la BBDD.
+	5. (modo practica) Mostramos el resultado y preguntamos si quiere intentarlo otra vez ->Si->Paso1(bucle);No-> (Paso1 de la siguiente pregunta)(bucle).
+FIN BUCLE
+6. 
+(modo examen)
+	Mostrar un listado con cada pregunta y si la opción introducida es correcta.
+	Mostramos resultado final por ejemplo->(5/10)(50%);
+(modo practica)
+	Mostramos resultado final por ejemplo->(5/10)(50%);
+FIN DEL PROGRAMA?
