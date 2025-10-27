@@ -1,0 +1,139 @@
+1. ¿Qué representa el sistema binario en informática?
+A. Un lenguaje de programación.
+B. Un sistema operativo.
+C. Un sistema numérico basado en 2 dígitos.
+D. Un tipo de base de datos.
+RESPUESTA: C
+
+2. ¿Cuál es la función principal de una CPU?
+A. Almacenar datos permanentemente.
+B. Ejecutar instrucciones y procesar datos.
+C. Mostrar información al usuario.
+D. Controlar el flujo de red.
+RESPUESTA: B
+
+3. ¿Qué es un byte?
+A. Una unidad lógica de almacenamiento en disco.
+B. Una dirección IP.
+C. 8 bits.
+D. Una instrucción de ensamblador.
+RESPUESTA: C
+
+4. ¿Qué es un sistema operativo?
+A. Un tipo de hardware.
+B. Un lenguaje de programación.
+C. Un software que administra los recursos del sistema.
+D. Una base de datos relacional.
+RESPUESTA: C
+
+5. ¿Cuál es el propósito de la memoria RAM?
+A. Almacenar datos permanentemente.
+B. Ejecutar conexiones de red.
+C. Almacenar datos temporalmente para procesos en ejecución.
+D. Gestionar permisos de usuarios.
+RESPUESTA: C
+
+6. ¿Qué significa HTTP?
+A. HyperText Transfer Protocol.
+B. Hyper Terminal Transfer Package.
+C. High Transfer Text Protocol.
+D. Host Transfer Text Protocol.
+RESPUESTA: A
+
+7. ¿Qué hace un compilador?
+A. Traduce código fuente a código máquina.
+B. Interpreta el código línea a línea.
+C. Genera errores sintácticos.
+D. Ejecuta directamente el código.
+RESPUESTA: A
+
+8. ¿Qué es una IP?
+A. Un protocolo de red.
+B. Una dirección lógica que identifica un dispositivo en una red.
+C. Un puerto de red.
+D. Un nombre de dominio.
+RESPUESTA: B
+
+9. ¿Qué es una base de datos relacional?
+A. Una colección de archivos de texto plano.
+B. Un conjunto de datos organizados en tablas con relaciones entre sí.
+C. Una carpeta con documentos.
+D. Una API para gestionar usuarios.
+RESPUESTA: B
+
+10. ¿Qué es una API?
+A. Una base de datos.
+B. Una interfaz para interactuar con servicios o aplicaciones.
+C. Un sistema de archivos.
+D. Un tipo de compilador.
+RESPUESTA: B
+
+11. ¿Qué tipo de software es Microsoft Excel?
+A. Sistema operativo.
+B. Software de base de datos.
+C. Hoja de cálculo.
+D. Navegador web.
+RESPUESTA: C
+
+12. ¿Qué lenguaje se usa comúnmente para el desarrollo web en el cliente?
+A. Java.
+B. Python.
+C. JavaScript.
+D. C++.
+RESPUESTA: C
+
+13. ¿Qué hace el sistema DNS?
+A. Controla el acceso a internet.
+B. Traduce nombres de dominio a direcciones IP.
+C. Envía correos electrónicos.
+D. Aumenta la velocidad de internet.
+RESPUESTA: B
+
+14. ¿Cuál es el propósito de una tarjeta gráfica?
+A. Procesar información de red.
+B. Mejorar el rendimiento del disco duro.
+C. Renderizar imágenes y gráficos.
+D. Controlar el volumen de audio.
+RESPUESTA: C
+
+15. ¿Qué es Git?
+A. Un sistema de gestión de base de datos.
+B. Un compilador para C++.
+C. Un sistema de control de versiones.
+D. Un navegador.
+RESPUESTA: C
+
+16. ¿Qué es un paquete en Java?
+A. Un archivo ejecutable.
+B. Un sistema operativo.
+C. Una agrupación de clases.
+D. Un tipo de método.
+RESPUESTA: C
+
+17. ¿Qué es un bucle for en programación?
+A. Una declaración de clase.
+B. Un tipo de variable.
+C. Una estructura de control repetitiva.
+D. Un tipo de función.
+RESPUESTA: C
+
+18. ¿Qué significa IDE?
+A. Integrated Development Environment.
+B. Internet Data Exchange.
+C. Internal Development Emulator.
+D. Inherited Data Entity.
+RESPUESTA: A
+
+19. ¿Qué hace un firewall?
+A. Acelera el internet.
+B. Cifra los datos de usuario.
+C. Bloquea accesos no autorizados a la red.
+D. Elimina virus del sistema.
+RESPUESTA: C
+
+20. ¿Qué significa URL?
+A. Uniform Resource Locator.
+B. Unified Result Language.
+C. Universal Record Layer.
+D. User Request List.
+RESPUESTA: A
