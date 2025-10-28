@@ -55,7 +55,9 @@ public class BBDD {
         ResultSet res;
 
         bindParams(stmt, parametros);
-        return stmt.executeQuery();
+        res = stmt.executeQuery();
+        stmt.close();
+        return res;
     }
 
     public <T> T ejecutarQuery(String sql, Mapper<T> mapper, Object... parametros) throws SQLException {

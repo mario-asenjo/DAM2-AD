@@ -33,9 +33,9 @@ public class Consola {
     }
 
     public static void mostrarArrayListString(List<String> listaAMostrar) {
-        mostrarFraseEndl("[+] Lista Informativa:", Colores.AZUL);
-        for (int i = 0; i < listaAMostrar.size(); i++) {
-            mostrarFraseEndl(String.format("[%d] %s", i, listaAMostrar.get(i)), Colores.VERDE);
+        mostrarFraseEndl("[+] Lista Informativa:");
+        for (int i = 0; listaAMostrar.get(i) != null; i++) {
+            mostrarFraseEndl(String.format("[%d] %s", listaAMostrar.get(i)), Colores.AMARILLO);
         }
     }
 }

@@ -1,6 +1,7 @@
 package controlador;
 
 import excepciones.LecturaEscrituraException;
+import excepciones.NumeroNoValidoException;
 import excepciones.StringNoValidoException;
 import modelo.ListaPreguntas;
 import modelo.Pregunta;
@@ -12,17 +13,18 @@ import vista.Escaner;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Map;
 
 public class ControladorPreguntas {
     public static int mostrarRespuesta(boolean modoExamen, boolean esCorrecta) {
         if (!modoExamen && !esCorrecta) {
-            Consola.mostrarFraseEndl("KO.");
+            Consola.mostrarFraseEndl("KO.",Colores.ROJO);
             if (Escaner.pedirBoolean("Quieres repetir la pregunta?: ")) {
                 return (-1);
             }
         } else if (!modoExamen) {
-            Consola.mostrarFraseEndl("OK.");
+            Consola.mostrarFraseEndl("OK.", Colores.VERDE);
         }
         return (0);
     }
@@ -78,6 +80,7 @@ public class ControladorPreguntas {
             servicioBD.insertarPreguntas(listaPreguntas.obtenerTodas());
 
             numeroPreguntas = Escaner.pedirEntero("Introduce un número de preguntas: ");
+            Validaciones.validarEntero(String.valueOf(numeroPreguntas), "[1-1000]");
             listaPreguntas.seleccionarPreguntas(numeroPreguntas);
             modoExamen = Escaner.pedirBoolean("MODO EXAMEN (SI O NO): ");
             resultados = new HashMap<>();
@@ -89,7 +92,7 @@ public class ControladorPreguntas {
                 i += mostrarRespuesta(modoExamen, esCorrecta);
             }
             mostrarResultados(resultados, modoExamen);
-        } catch (SQLException | StringNoValidoException | LecturaEscrituraException e) {
+        } catch (SQLException | StringNoValidoException | NumeroNoValidoException | LecturaEscrituraException e) {
             Consola.mostrarExcepcion(e);
         }
     }
