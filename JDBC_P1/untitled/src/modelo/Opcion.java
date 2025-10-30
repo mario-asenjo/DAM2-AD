@@ -37,4 +37,5 @@ public class Opcion {
     public String toString() {
         return String.format("[ %c ] %s", this.opcion, this.texto);
     }
+
 }

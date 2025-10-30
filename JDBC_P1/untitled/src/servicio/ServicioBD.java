@@ -3,31 +3,80 @@ package servicio;
 import modelo.Opcion;
 import modelo.Pregunta;
 import repositorio.BBDD;
+import utils.DBConnection;
+import vista.Colores;
+import vista.Consola;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ServicioBD {
     private final BBDD repo;
 
     public ServicioBD() throws SQLException {
-        repo = new BBDD();
+        repo = new BBDD(DBConnection.getConnection());
     }
 
-    public void insertarPreguntas(List<Pregunta> preguntas) throws SQLException {
-        final String insertPregunta = "INSERT INTO pregunta (ID, ENUNCIADO) VALUES (?, ?);";
-        final String insertOpcion = "INSERT INTO opcion (ID, TEXTO, OPCION, CORRECTA, ID_PREGUNTA) VALUES (?, ?, ?, ?, ?);";
+    public List<Pregunta> devolverSeleccionPreguntas(int numeroPreguntas) throws SQLException {
+        List<Pregunta> retorno;
+        String sql;
 
+        sql = "SELECT * FROM preguntas_desordenadas LIMIT ?";
+        retorno = repo.ejecutarQuery(
+                    sql,
+                    resultSet -> {
+                        List<Pregunta> listaRetorno = new ArrayList<>();
+                        List<Opcion> opciones;
+                        String enunciado;
+                        Long idPregunta;
+                        resultSet.next();
+                        while (!resultSet.isLast()) {
+                            idPregunta = resultSet.getLong("P_ID");
+                            enunciado = resultSet.getString("P_ENUNCIADO");
+                            opciones = new ArrayList<>();
+                            for (int i = 0; i < 4; i++) {
+                                opciones.add(
+                                        new Opcion(resultSet.getLong("O_ID"),
+                                                resultSet.getString("O_TEXTO"),
+                                                resultSet.getString("O_OPCION").charAt(0),
+                                                resultSet.getBoolean("O_CORRECTA"))
+                                );
+                                if (!resultSet.isLast())
+                                    resultSet.next();
+                            }
+                            listaRetorno.add(
+                                    new Pregunta(idPregunta, enunciado, opciones)
+                            );
+                        }
+                        return (listaRetorno);
+                    },
+                    numeroPreguntas * 4
+                );
+        return retorno;
+    }
+
+    public int insertarPreguntas(List<Pregunta> preguntas) throws SQLException {
+        final String insertPregunta = "INSERT INTO preguntas (ID, ENUNCIADO) VALUES (?, ?);";
+        final String insertOpcion = "INSERT INTO opcion (ID, TEXTO, OPCION, CORRECTA, ID_PREGUNTA) VALUES (?, ?, ?, ?, ?);";
+        int preguntasInsertadas;
+        int respuestasInsertadas;
+
+        preguntasInsertadas = 0;
+        respuestasInsertadas = 0;
         for (Pregunta pregunta : preguntas) {
-            repo.ejecutarDML(insertPregunta, pregunta.getId(), pregunta.getEnunciado());
+            preguntasInsertadas += repo.ejecutarDML(insertPregunta, pregunta.getId(), pregunta.getEnunciado());
             for (Opcion opcion : pregunta.getOpciones()) {
-                repo.ejecutarDML(insertOpcion, opcion.getId(), opcion.getTexto(), opcion.getOpcion(), opcion.isEsCorrecta(), pregunta.getId());
+                respuestasInsertadas += repo.ejecutarDML(insertOpcion, opcion.getId(), opcion.getTexto(), opcion.getOpcion(), opcion.isEsCorrecta(), pregunta.getId());
             }
         }
+        Consola.mostrarFraseEndl(String.format("Preguntas Insertadas: %d \n Respuestas Insertadas: %d\n",
+                                    preguntasInsertadas, respuestasInsertadas), Colores.VERDE);
+        return (preguntasInsertadas + respuestasInsertadas);
     }
 
     public boolean esOpcionCorrecta(Character opcion, Long id_pregunta) throws SQLException {
@@ -48,7 +97,13 @@ public class ServicioBD {
     }
 
     public void eliminarContenidoSiHubiese() throws SQLException {
-        repo.ejecutarDML("DELETE FROM pregunta;");
+        repo.ejecutarDML("DELETE FROM preguntas;");
         repo.ejecutarDML("DELETE FROM opcion;");
+    }
+
+    public void cerrarServicio() throws SQLException {
+        if (repo.isConnected()) {
+            repo.closeConnection();
+        }
     }
 }
