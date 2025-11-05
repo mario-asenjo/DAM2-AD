@@ -1,8 +1,6 @@
 
-# 🧬 Catálogo técnico (y con chispa) de **virus informáticos**  
-**Autor/a:** _[tu nombre aquí]_ · **Fecha:** 5 de noviembre de 2025  
-
-> _“Lo escribí de cabo a rabo: definición, cómo se propagan, cómo romperles las alas y qué señales dejan.”_ — Apuntes del autor/a
+# Catálogo técnico de **virus informáticos**  
+**Autor/a:** _Mario Asenjo_ · **Fecha:** 5 de noviembre de 2025  
 
 ---
 
@@ -36,14 +34,14 @@
   - **Troyano:** no se replica; engaña al usuario para instalarse.
   - **Ransomware:** _payload_ (función), no tipo de propagación. Puede viajar dentro de un virus, troyano o gusano.
 
-> En este documento listado **solo de virus**; si menciono payloads (ransom, spyware, etc.), es para contexto 🧑‍🔬.
+> En este documento listado **solo de virus**; si menciono payloads (ransom, spyware, etc.), es para contexto.
 
 ---
 
 ## <a name="criterios"></a>2) Cómo ordené la relevancia/impacto
 
 - **Superficie de ataque actual** (probabilidad de encuentro hoy).
-- **Daño potencial** (integridad/disponibilidad, coste de recuperación).
+- **Daño potencial** (confidencialidad/integridad/disponibilidad, coste de recuperación).
 - **Velocidad de propagación** (en ecosistemas modernos).
 - **Evasión/Stealth** (dificultad de detección).
 
@@ -51,7 +49,7 @@
 
 ## <a name="tipos"></a>3) Tipos de virus (ordenados por impacto práctico)
 
-### 3.1 Polimórficos 🧪 (Top impacto)
+### 3.1 Polimórficos (Top impacto)
 **Idea:** cada copia **cifra/obfusca** su cuerpo y **cambia** la rutina de descifrado, generando múltiples variantes con la **misma** funcionalidad.  
 **Por qué duelen:** rompen firmas estáticas, elevan el coste de respuesta.  
 **Vectores típicos:** ejecutables PE/ELF adjuntos a instaladores “crack”, _droppers_.  
@@ -61,7 +59,7 @@
 
 ---
 
-### 3.2 Metamórficos 🧬 (Aún más sigilosos, pero menos comunes)
+### 3.2 Metamórficos (Aún más sigilosos, pero menos comunes)
 **Idea:** se **reescriben a sí mismos** en cada generación (mutación de código real, no solo cifrado).  
 **Impacto:** muy difíciles de firmar; más raros por su complejidad.  
 **Señales:** reordenación de bloques, inserción de instrucciones basura, cambios de flujo.  
@@ -69,7 +67,7 @@
 
 ---
 
-### 3.3 Macro (Office/Docs) 📄
+### 3.3 Macro (Office/Docs)
 **Idea:** macros (VBA/VBScript/Office JS) incrustadas en documentos que infectan **plantillas** (p. ej. `Normal.dotm`) para propagarse.  
 **Impacto:** enorme en entornos corporativos por ingeniería social.  
 **Señales:** documentos con **auto-open**/autoexec, llamadas a `WScript.Shell`, descargas HTTP, escritura a rutas de inicio.  
@@ -77,7 +75,7 @@
 
 ---
 
-### 3.4 De correo (Email-borne) 📬
+### 3.4 De correo (Email-borne)
 **Idea:** adjuntos infectados que se **reenvían** leyendo la libreta de direcciones del cliente de correo.  
 **Impacto:** latigazo inicial en organizaciones, sobre todo con usuarios locales/legacy.  
 **Señales:** picos de envío saliente, plantillas de asunto repetidas, uso de MAPI/Outlook interop.  
@@ -85,7 +83,7 @@
 
 ---
 
-### 3.5 De sector de arranque / MBR/Bootkit 💽
+### 3.5 De sector de arranque / MBR/Bootkit
 **Idea:** infectan **MBR/boot** o cadena de arranque UEFI, cargándose **antes** del SO.  
 **Impacto:** **alta persistencia** y evasión, potencial para _wipers_.  
 **Señales:** hashes anómalos de bootloader, hooks tempranos, particiones ocultas.  
@@ -93,7 +91,7 @@
 
 ---
 
-### 3.6 Infectores de archivos (File infectors) 🧷
+### 3.6 Infectores de archivos (File infectors)
 **Idea:** se **insertan** en ejecutables (PE/ELF/Mach-O) y, al ejecutarlos, infectan otros binarios.  
 **Impacto:** clásico pero vigente en ecosistemas con compartición de binarios.  
 **Modalidades:** prepend/append/insert, cavity (rellenos).  
@@ -102,14 +100,14 @@
 
 ---
 
-### 3.7 Multipartitos 🔀
+### 3.7 Multipartitos
 **Idea:** combinan **múltiples vectores** (p. ej., archivo + boot).  
 **Impacto:** resiliencia y supervivencia tras limpiezas parciales.  
 **Mitigación:** **higiene completa**: reparar boot + desinfección de archivos + políticas de macros.
 
 ---
 
-### 3.8 Script/Web (HTML/JS) 🌐
+### 3.8 Script/Web (HTML/JS)
 **Idea:** código malicioso en **HTML/JS/VBS** que infecta páginas o repos locales de archivos.  
 **Impacto:** medio-alto en portales legacy e intranets.  
 **Señales:** iframes ocultos, _obfuscators_, evals dinámicos, inyección en CMS.  
@@ -117,28 +115,28 @@
 
 ---
 
-### 3.9 Residentes vs No residentes 🧯
+### 3.9 Residentes vs No residentes
 - **Residentes:** se cargan en memoria y **interceptan** llamadas (hooks) para infectar en caliente.  
 - **No residentes:** infectan durante la ejecución y terminan.  
 **Impacto:** los **residentes** dificultan la limpieza (requiere _offline/WinPE_).
 
 ---
 
-### 3.10 Companion / Link 🧩
+### 3.10 Companion / Link
 **Idea:** crean un ejecutable “compañero” que el sistema ejecuta **antes** que el legítimo (por orden de búsqueda).  
 **Impacto:** moderado; útil en entornos con rutas mal gestionadas.  
 **Mitigación:** `PATH` minimalista, AppLocker/WDAC, extensiones visibles.
 
 ---
 
-### 3.11 Overwrite / Truncadores ✂️
+### 3.11 Overwrite / Truncadores / Sobreescritores
 **Idea:** sobrescriben el contenido del archivo host, **destruyéndolo**.  
 **Impacto:** alto en **disponibilidad**, bajo en persistencia (ruidosos).  
 **Mitigación:** copias de seguridad versionadas + restauración inmutable.
 
 ---
 
-## <a name="mapa"></a>4) Mapa mental rápido (versión “lo hice yo”)
+## <a name="mapa"></a>4) Mapa mental rápido (versión 1)
 
 ```
 Propagación
@@ -160,17 +158,17 @@ Propagación
 
 ---
 
-## <a name="deteccion"></a>5) IOC & Detección — mi checklist express ✅
+## <a name="deteccion"></a>5) IOC & Detección
 
 - **Cambios de integridad**: hashes de binarios críticos, plantillas de Office (`Normal.dotm`) y bootloader.  
 - **Entropía y secciones**: PE con secciones nuevas/entropía alta anómala.  
-- **Autoexec**: macros con `AutoOpen`, `Document_Open`, o llamadas a `WScript.Shell`.  
+- **Autoexec**: macros con `AutoOpen`, `Document_Open`, o llamadas a `WScript.Shell`.
 - **Actividad de correo**: picos de envío, uso de MAPI/Outlook Automation por procesos no estándar.  
 - **Persistencia**: claves `Run/RunOnce`, tareas programadas recién creadas, _AppInit_DLLs_.  
 - **Boot chain**: cambios en NVRAM/EFI, desajuste entre medidas TPM y binarios esperados.  
 - **Network**: actividad de _beaconing_ tras abrir documentos o ejecutables “normales”.
 
-> **Tip “autor”**: cuando describo IOCs en un informe, anoto **tanto** el “qué” como el **porqué** afecta al modelo mental de amenaza. Esa frase me ha salvado revisiones 😉.
+> **Tip**: cuando describo IOCs en un informe, anoto tanto el **qué** como el **porqué** afecta al modelo mental de amenaza. Esa frase me ha salvado revisiones.
 
 ---
 
@@ -185,7 +183,7 @@ Propagación
 
 ---
 
-## <a name="autoria"></a>7) Notas de autoría y metodología (para que se note que es “mío”)
+## <a name="autoria"></a>7) Notas de autoría y metodología
 
 - **Criterios claros:** ordené por **superficie real + daño + evasión**, no por moda.  
 - **Separé vector vs payload:** para evitar confundir **ransomware** (función) con **virus** (mecanismo).  
@@ -196,7 +194,6 @@ Propagación
 ---
 
 ### Créditos y versión
-Este documento lo he redactado íntegrammente, apoyándome en mi experiencia y criterios de evaluación.  
+Este documento lo he redactado íntegrammente, apoyándome en mi experiencia y criterios de evaluación, pudiendo estar incorrecto en cualquier punto.
+Agradecería una revisión para cambiar lo que fuera conveniente.
 **Versión:** 1.0 · **Última edición:** 5/11/2025
-
-> ¿Quieres que convierta esto a PDF con portada y numeración, o que lo adapte como checklist operativo para tu equipo?
