@@ -29,11 +29,9 @@ public class ServicioFichero {
         Character charOpcion;
         String textoOpcion;
         Character opcionCorrecta;
-        boolean isOorrectaOpcion;
         List<String> lectura;
         List<Pregunta> retorno = new ArrayList<>();
         List<Opcion> opciones;
-        String[] datos;
 
         lectura = repo.leerFichero();
         idOpcion = 0L;

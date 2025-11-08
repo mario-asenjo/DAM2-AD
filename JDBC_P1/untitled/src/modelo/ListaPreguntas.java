@@ -7,26 +7,17 @@ import java.util.Random;
 import java.util.random.RandomGenerator;
 
 public class ListaPreguntas {
-    private List<Pregunta> listaPreguntas;
-    private List<Pregunta> listaSeleccionada;
+    private List<Pregunta> listaDePreguntas;
 
-    public ListaPreguntas(List<Pregunta> preguntas) {
-        this.listaPreguntas = new ArrayList<>(preguntas);
-        this.listaSeleccionada = new ArrayList<>();
+    public ListaPreguntas() {
+        this.listaDePreguntas = new ArrayList<>();
     }
 
-    public void seleccionarPreguntas(int preguntasADevolver) {
-        Collections.shuffle(this.listaPreguntas, RandomGenerator.getDefault());
-        for (int i = 0; i < preguntasADevolver; i++) {
-            this.listaSeleccionada.add(listaPreguntas.get(i));
-        }
+    public void setListaDePreguntas(List<Pregunta> listaPreguntas) {
+        this.listaDePreguntas = listaPreguntas;
     }
 
-    public List<Pregunta> obtenerTodas() {
-        return this.listaPreguntas;
-    }
-
-    public List<Pregunta> obtenerSeleccionadas() {
-        return this.listaSeleccionada;
+    public List<Pregunta> getListaDePreguntas() {
+        return this.listaDePreguntas;
     }
 }

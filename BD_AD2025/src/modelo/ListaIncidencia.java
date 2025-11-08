@@ -40,4 +40,12 @@ public class ListaIncidencia {
     public void anadirIncidencia(String mensaje, String usuario) {
         incidencias.add(new Incidencia(LocalDateTime.now(), mensaje, usuario));
     }
+
+    public void reinsertarIncidencias(List<Incidencia> listaNueva) {
+        incidencias = listaNueva;
+    }
+
+    public List<Incidencia> obtenerTodas() {
+        return (incidencias);
+    }
 }

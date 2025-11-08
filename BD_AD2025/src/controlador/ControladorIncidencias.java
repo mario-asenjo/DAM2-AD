@@ -62,10 +62,10 @@ public class ControladorIncidencias {
                                 Consola.mostrarArrayListString(listaIncidencias.buscarPorUsuario(usuarioBusqueda));
                                 break;
                             case 2:
-                                fechaBusquedaInicial = Escaner.pedirString("Introduce una fecha inicial con el siguiente formato (YYYY-MM-DD): ");
-                                Validaciones.validarFecha(fechaBusquedaInicial, "^(?:(?:(?!0000)[0-9]{4})-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|02-(?:0[1-9]|1\\d|2[0-8]))|(?:(?!0000)(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:[02468][048]|[13579][26])00))-02-29)$", 10);
-                                fechaBusquedaFinal = Escaner.pedirString("Introduce una fecha final con el siguiente formato (YYYY-MM-DD): ");
-                                Validaciones.validarFecha(fechaBusquedaFinal, "^(?:(?:(?!0000)[0-9]{4})-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|02-(?:0[1-9]|1\\d|2[0-8]))|(?:(?!0000)(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:[02468][048]|[13579][26])00))-02-29)$", 10);
+                                fechaBusquedaInicial = Escaner.pedirString("Introduce una fecha inicial con el siguiente formato: ");
+                                Validaciones.validarFecha(fechaBusquedaInicial, "^[0-9]{4}/(?:(?:0[13578]|1[02])/(?:0[1-9]|[12][0-9]|3[01])|(?:0[469]|11)/(?:0[1-9]|[12][0-9]|30)|02/(?:0[1-9]|1[0-9]|2[0-9]))$", 10);
+                                fechaBusquedaFinal = Escaner.pedirString("Introduce una fecha final con el siguiente formato: ");
+                                Validaciones.validarFecha(fechaBusquedaFinal, "^[0-9]{4}/(?:(?:0[13578]|1[02])/(?:0[1-9]|[12][0-9]|3[01])|(?:0[469]|11)/(?:0[1-9]|[12][0-9]|30)|02/(?:0[1-9]|1[0-9]|2[0-9]))$", 10);
                                 Consola.mostrarArrayListString(listaIncidencias.buscarPorRangoFechas(LocalDate.parse(fechaBusquedaInicial), LocalDate.parse(fechaBusquedaFinal)));
                                 break;
                         }

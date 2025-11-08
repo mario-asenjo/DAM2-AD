@@ -21,7 +21,15 @@ public class ServicioFichero {
 
     public void guardar(String usuario, String exceptionMessage) throws LecturaEscrituraException {
         Incidencia incidencia = new Incidencia(LocalDateTime.now(), exceptionMessage, usuario);
-        repo.escribirLinea(incidencia.toFileString());
+        if (incidencia != null) {
+            repo.escribirLinea(incidencia.toFileString());
+        } else {
+            throw new LecturaEscrituraException("No se pudo crear el objeto Incidencia correctamente.");
+        }
+    }
+
+    public void guardar(Incidencia incidencia) throws LecturaEscrituraException {
+        System.out.println("Metodo guardar Objeto en ServicioFichero.");
     }
 
     public List<Incidencia> leer() throws LecturaEscrituraException {
@@ -35,7 +43,9 @@ public class ServicioFichero {
         for (String x : lectura) {
             datos = x.split(";");
             incidencia = new Incidencia(LocalDateTime.parse(String.join("T", datos[0], datos[1])), datos[2], datos[3]);
-            listaRetorno.add(incidencia);
+            if (incidencia != null) {
+                listaRetorno.add(incidencia);
+            }
         }
         return (listaRetorno);
     }

@@ -9,8 +9,8 @@ import java.util.List;
 public class BBDD {
     Connection conexion;
 
-    public BBDD() throws SQLException {
-        this.conexion = DBConnection.getConnection();
+    public BBDD(Connection conexion) throws SQLException {
+        this.conexion = conexion;
     }
 
     private void bindParams(PreparedStatement stmt, Object... parametros) throws SQLException {
@@ -42,12 +42,14 @@ public class BBDD {
         }
     }
 
-    public void ejecutarDML(String sql, Object... parametros) throws SQLException {
+    public int ejecutarDML(String sql, Object... parametros) throws SQLException {
         PreparedStatement stmt = conexion.prepareStatement(sql);
+        int filasAfectadas;
 
         bindParams(stmt, parametros);
-        stmt.executeUpdate();
+        filasAfectadas = stmt.executeUpdate();
         stmt.close();
+        return (filasAfectadas);
     }
 
     public ResultSet ejecutarQuery(String sql, Object... parametros) throws SQLException {
@@ -55,7 +57,9 @@ public class BBDD {
         ResultSet res;
 
         bindParams(stmt, parametros);
-        return stmt.executeQuery();
+        res = stmt.executeQuery();
+        stmt.close();
+        return res;
     }
 
     public <T> T ejecutarQuery(String sql, Mapper<T> mapper, Object... parametros) throws SQLException {
@@ -66,14 +70,22 @@ public class BBDD {
         stmt = conexion.prepareStatement(sql);
         bindParams(stmt, parametros);
         res = stmt.executeQuery();
-        retorno = mapper.mapToType(res);
+        retorno = mapper.miMetodoMapper(res);
         res.close();
         stmt.close();
         return retorno;
     }
 
+    public boolean isConnected() throws SQLException {
+        return !this.conexion.isClosed();
+    }
+
+    public void closeConnection() throws SQLException {
+        this.conexion.close();
+    }
+
     @FunctionalInterface
     public interface Mapper<T> {
-        T mapToType(ResultSet resultSet) throws SQLException;
-     }
+        T miMetodoMapper(ResultSet resultSet) throws SQLException;
+    }
 }
