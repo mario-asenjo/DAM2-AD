@@ -1,0 +1,349 @@
+1. ¿Cuál es la palabra clave para declarar una variable inmutable en Kotlin?
+A. let
+B. var
+C. val
+D. const
+RESPUESTA: C
+
+2. ¿Qué tipo de archivo se usa para almacenar recursos multimedia en Android?
+A. .java
+B. .xml
+C. .res
+D. .mp3
+RESPUESTA: B
+
+3. ¿Cuál de los siguientes es un tipo de dato primitivo en Kotlin?
+A. Int
+B. Integer
+C. float
+D. double
+RESPUESTA: A
+
+4. ¿Qué función en Kotlin se usa para imprimir en consola?
+A. print()
+B. println()
+C. echo()
+D. log()
+RESPUESTA: B
+
+5. ¿Cuál de estos formatos de imagen soporta transparencia?
+A. JPG
+B. BMP
+C. PNG
+D. TIFF
+RESPUESTA: C
+
+6. ¿Qué clase de Android se usa para reproducir archivos de audio?
+A. AudioPlayer
+B. AudioManager
+C. MediaPlayer
+D. SoundView
+RESPUESTA: C
+
+7. ¿Qué tipo de bucle permite recorrer elementos en una colección en Kotlin?
+A. loop
+B. forEach
+C. map
+D. collect
+RESPUESTA: B
+
+8. ¿Cuál es el contenedor estándar para video en Android?
+A. VideoView
+B. ImageView
+C. FrameLayout
+D. MediaContainer
+RESPUESTA: A
+
+9. ¿Cuál es la extensión de archivo típica de un video en Android?
+A. .avi
+B. .mp4
+C. .mkv
+D. .flv
+RESPUESTA: B
+
+10. ¿Qué palabra clave se usa para declarar una función en Kotlin?
+A. def
+B. fun
+C. func
+D. method
+RESPUESTA: B
+
+11. ¿Cómo se representa una cadena de texto en Kotlin?
+A. string
+B. String
+C. str
+D. Text
+RESPUESTA: B
+
+12. ¿Qué clase se utiliza para manipular imágenes en Android?
+A. Canvas
+B. ImageManager
+C. Bitmap
+D. Drawable
+RESPUESTA: C
+
+13. ¿Qué método de MediaPlayer inicia la reproducción?
+A. begin()
+B. play()
+C. start()
+D. launch()
+RESPUESTA: C
+
+14. ¿Qué librería permite usar OpenGL en Android?
+A. Vulkan
+B. GLES
+C. GDI
+D. Metal
+RESPUESTA: B
+
+15. ¿Cómo se declara una lista mutable en Kotlin?
+A. listOf()
+B. mutableListOf()
+C. arrayList()
+D. createList()
+RESPUESTA: B
+
+16. ¿Cuál es el método correcto para pausar un vídeo en VideoView?
+A. pause()
+B. stop()
+C. suspend()
+D. halt()
+RESPUESTA: A
+
+17. ¿Qué tipo de archivo de sonido ofrece mejor compresión?
+A. WAV
+B. MP3
+C. FLAC
+D. PCM
+RESPUESTA: B
+
+18. ¿Qué componente de Android permite dibujar elementos gráficos personalizados?
+A. Canvas
+B. SurfaceView
+C. CustomLayout
+D. GridLayout
+RESPUESTA: B
+
+19. ¿Cómo se accede a un recurso de audio en res/raw en Kotlin?
+A. R.raw.nombre
+B. res.audio.nombre
+C. resource.audio.nombre
+D. R.audio.nombre
+RESPUESTA: A
+
+20. ¿Cuál es el valor predeterminado de una variable no inicializada nullable en Kotlin?
+A. null
+B. 0
+C. ""
+D. undefined
+RESPUESTA: A
+
+21. ¿Qué símbolo se usa para declarar un tipo nullable?
+A. *
+B. ?
+C. #
+D. !
+RESPUESTA: B
+
+22. ¿Cuál de las siguientes clases permite dibujar formas básicas en Android?
+A. Canvas
+B. Layout
+C. RectView
+D. Painter
+RESPUESTA: A
+
+23. ¿Cuál es la ventaja de usar WebP sobre PNG en Android?
+A. Mejor sonido
+B. Menor calidad
+C. Mejor compresión
+D. Soporte de texto
+RESPUESTA: C
+
+24. ¿Qué componente permite mostrar una imagen en Android?
+A. TextView
+B. ImageView
+C. CanvasView
+D. Button
+RESPUESTA: B
+
+25. ¿Cómo se representa una función lambda en Kotlin?
+A. { x -> x * 2 }
+B. lambda(x): x * 2
+C. fn(x) => x * 2
+D. -> { x * 2 }
+RESPUESTA: A
+
+26. ¿Qué clase se usa para reproducir sonido de forma eficiente y repetitiva?
+A. MediaPlayer
+B. SoundPool
+C. AudioPlayer
+D. LoopAudio
+RESPUESTA: B
+
+27. ¿Cuál de estos es un tipo de interpolador usado en animaciones de Android?
+A. BounceInterpolator
+B. SlideInterpolator
+C. FrameInterpolator
+D. RenderInterpolator
+RESPUESTA: A
+
+28. ¿Qué estructura permite reproducir vídeo embebido con controles?
+A. VideoView
+B. WebView
+C. FramePlayer
+D. MovieBox
+RESPUESTA: A
+
+29. ¿Qué función permite limitar el tamaño de una imagen en memoria?
+A. compress()
+B. resize()
+C. decodeSampledBitmapFromResource()
+D. clamp()
+RESPUESTA: C
+
+30. ¿Qué significa la extensión .kt?
+A. Archivo de imagen
+B. Archivo de clase Java
+C. Archivo de código fuente Kotlin
+D. Archivo comprimido
+RESPUESTA: C
+
+31. ¿Qué función detiene permanentemente un MediaPlayer?
+A. stop()
+B. pause()
+C. kill()
+D. end()
+RESPUESTA: A
+
+32. ¿Qué método de ImageView permite cambiar su imagen?
+A. update()
+B. setImageResource()
+C. setBackground()
+D. load()
+RESPUESTA: B
+
+33. ¿Qué función se usa para repetir un sonido en MediaPlayer?
+A. loop()
+B. setLooping(true)
+C. playLoop()
+D. repeat()
+RESPUESTA: B
+
+34. ¿Cómo se manejan errores en Kotlin?
+A. try/catch
+B. catch/throw
+C. throw/if
+D. try/else
+RESPUESTA: A
+
+35. ¿Qué clase se usa para representar colores en Android?
+A. Paint
+B. Color
+C. RGBA
+D. Hex
+RESPUESTA: B
+
+36. ¿Cuál es la función principal de `onDraw()`?
+A. Crear vistas
+B. Dibujar sobre un canvas
+C. Reproducir vídeo
+D. Compilar código
+RESPUESTA: B
+
+37. ¿Qué significa `lateinit` en Kotlin?
+A. Variable sin tipo
+B. Inicialización tardía
+C. Tipo de dato dinámico
+D. Función recursiva
+RESPUESTA: B
+
+38. ¿Cuál es el operador Elvis en Kotlin?
+A. !!
+B. ??
+C. ?:
+D. .?
+RESPUESTA: C
+
+39. ¿Qué es un "Frame" en video?
+A. Un efecto visual
+B. Un fotograma individual
+C. Un codec
+D. Un reproductor
+RESPUESTA: B
+
+40. ¿Qué librería facilita la carga de imágenes en Android?
+A. Volley
+B. Retrofit
+C. Glide
+D. Room
+RESPUESTA: C
+
+41. ¿Qué clase se usa para animaciones en Kotlin con Android?
+A. Animator
+B. MotionLayout
+C. AnimatorSet
+D. Todas las anteriores
+RESPUESTA: D
+
+42. ¿Qué archivo contiene los recursos en Android?
+A. strings.txt
+B. values.xml
+C. res.doc
+D. assets.ini
+RESPUESTA: B
+
+43. ¿Qué librería de Google permite crear gráficos en tiempo real?
+A. WebGL
+B. Jetpack Compose
+C. OpenGL ES
+D. GStreamer
+RESPUESTA: C
+
+44. ¿Cuál es el propósito del método `invalidate()`?
+A. Eliminar una vista
+B. Dibujar nuevamente
+C. Pausar animaciones
+D. Actualizar imágenes
+RESPUESTA: B
+
+45. ¿Qué propiedad define la duración de una animación?
+A. delay
+B. time
+C. duration
+D. length
+RESPUESTA: C
+
+46. ¿Cuál es el ciclo de vida de una actividad donde se deben liberar recursos?
+A. onStart
+B. onPause
+C. onDestroy
+D. onCreate
+RESPUESTA: C
+
+47. ¿Qué se usa para manejar múltiples pistas de audio simultáneamente?
+A. MediaPlayer
+B. AudioTrack
+C. SoundPool
+D. MediaCodec
+RESPUESTA: C
+
+48. ¿Qué es un drawable?
+A. Archivo de audio
+B. Archivo XML para gráficos
+C. Archivo de video
+D. Clase para reproducir sonidos
+RESPUESTA: B
+
+49. ¿Qué clase permite reproducir streaming de audio?
+A. MediaPlayer
+B. SoundPool
+C. AudioRecord
+D. AudioStream
+RESPUESTA: A
+
+50. ¿Qué keyword se usa para extender una clase en Kotlin?
+A. implement
+B. extend
+C. inherits
+D. :
+RESPUESTA: D

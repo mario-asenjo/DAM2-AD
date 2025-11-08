@@ -70,7 +70,7 @@ public class ControladorPreguntas {
         char opcion;
         boolean esCorrecta;
 
-        servicioFichero = new ServicioFichero("Data/50preguntasInformatica.txt");
+        servicioFichero = new ServicioFichero("Data/50preguntasKotlin.txt");
         try {
             listaPreguntas = new ListaPreguntas(servicioFichero.leer());
             servicioBD = new ServicioBD();

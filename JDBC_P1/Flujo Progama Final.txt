@@ -23,7 +23,7 @@ Imaginemos que en el fichero hay 200 preguntas. El usuario tiene que introducir 
 	por ejemplo 10, y el programa debe devolver 10 preguntas aleatorias.
 OPCIONAL -> 3. Preguntar si quiere usar el contenido de la base de datos actual, si hay, o si quiere cargar nuevas preguntas desde un fichero.
 3. Mostrar menú: Modo practica o Modo examen.
-4. Pedirle al usuario un número. -> 10
+4. Pedirle al usuario un número. -> 10 -> numero de preguntas aleatorias a devolver.
 5. Guardar una lista de 10 preguntas aleatorias.
 MIENTRAS HAYA PREGUNTAS EN LA LISTA.
 	1. El programa devuelve una pregunta con sus opciones.

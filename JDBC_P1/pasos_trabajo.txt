@@ -1,0 +1,9 @@
+1. Crear la base de datos.
+2. Crear un proyecto Java e  integrar dependencias para bases de datos.
+3. Crear los paquetes para las capas modelo, vista, controlador, servicio y repositorio.
+4. Pensar en el flujo del programa antes de programar nada, aquí nos vamos a dar cuenta de que partes de este programa ya tenemos desarrolladas y podemos reutilizar.
+5. Importar de otros proyectos las partes que no hagan falta desarrollar de nuevo, como por ejemplo: 
+	- 
+	- 
+	- 
+6. 
