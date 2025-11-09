@@ -1,13 +1,90 @@
 package org.example.infra.db;
 
+import javax.sql.DataSource;
 import java.sql.*;
 
 public class BBDD {
-    Connection conexion;
+    private final DataSource dataSource;
 
-    public BBDD(Connection conexion) throws SQLException {
-        this.conexion = conexion;
+    public BBDD(DataSource dataSource) throws SQLException {
+        this.dataSource = dataSource;
     }
+
+    /*---------------- API PUBLICA (abren y cierran conexión) ----------------*/
+
+    public int ejecutarDML(String sql, Object... parametros) throws SQLException {
+        Connection conexion = dataSource.getConnection();
+        PreparedStatement stmt = conexion.prepareStatement(sql);
+        int filasAfectadas;
+
+        bindParams(stmt, parametros);
+        filasAfectadas = stmt.executeUpdate();
+        stmt.close();
+        conexion.close();
+        return (filasAfectadas);
+    }
+
+    public <T> T ejecutarQuery(String sql, Mapper<T> mapper, Object... parametros) throws SQLException {
+        Connection conexion = dataSource.getConnection();
+        PreparedStatement stmt = conexion.prepareStatement(sql);
+        ResultSet res;
+        T retorno;
+
+        bindParams(stmt, parametros);
+        res = stmt.executeQuery();
+        retorno = mapper.miMetodoMapper(res);
+        res.close();
+        stmt.close();
+        conexion.close();
+        return retorno;
+    }
+
+    /*---------------- Transacción / bloque con la misma conexión ----------------*/
+
+    public <T> T inTransaction(SQLFunction<Connection, T> work) throws SQLException {
+        Connection conexion = dataSource.getConnection();
+        boolean prev = conexion.getAutoCommit();
+        T result;
+        try {
+            conexion.setAutoCommit(false);
+            result = work.apply(conexion);
+            conexion.commit();
+            return result;
+        } catch (Exception e) {
+            conexion.rollback();
+            if (e instanceof SQLException se) throw se;
+            throw new SQLException("Error en transacción", e);
+        } finally {
+            conexion.setAutoCommit(prev);
+        }
+    }
+
+    /*---------------- Metodos sobrecargados que aceptan Connection ----------------*/
+
+    public int ejecutarDML(Connection conexion, String sql, Object... parametros) throws SQLException {
+        int filasAfectadas;
+        PreparedStatement stmt = conexion.prepareStatement(sql);
+
+        bindParams(stmt, parametros);
+        filasAfectadas = stmt.executeUpdate();
+        stmt.close();
+        return (filasAfectadas);
+    }
+
+    public <T> T ejecutarQuery(Connection conexion, String sql, Mapper<T> mapper, Object... parametros) throws SQLException {
+        PreparedStatement stmt = conexion.prepareStatement(sql);
+        ResultSet res;
+        T retorno;
+
+        bindParams(stmt, parametros);
+        res = stmt.executeQuery();
+        retorno = mapper.miMetodoMapper(res);
+        res.close();
+        stmt.close();
+        return retorno;
+    }
+
+    /*---------------- Utilidades ----------------*/
 
     private void bindParams(PreparedStatement stmt, Object... parametros) throws SQLException {
         Object p;
@@ -38,66 +115,15 @@ public class BBDD {
         }
     }
 
-    public int ejecutarDML(String sql, Object... parametros) throws SQLException {
-        PreparedStatement stmt = conexion.prepareStatement(sql);
-        int filasAfectadas;
-
-        bindParams(stmt, parametros);
-        filasAfectadas = stmt.executeUpdate();
-        stmt.close();
-        return (filasAfectadas);
-    }
-
-    public ResultSet ejecutarQuery(String sql, Object... parametros) throws SQLException {
-        PreparedStatement stmt = conexion.prepareStatement(sql);
-        ResultSet res;
-
-        bindParams(stmt, parametros);
-        res = stmt.executeQuery();
-        stmt.close();
-        return res;
-    }
-
-    public <T> T ejecutarQuery(String sql, Mapper<T> mapper, Object... parametros) throws SQLException {
-        PreparedStatement stmt;
-        ResultSet res;
-        T retorno;
-
-        stmt = conexion.prepareStatement(sql);
-        bindParams(stmt, parametros);
-        res = stmt.executeQuery();
-        retorno = mapper.miMetodoMapper(res);
-        res.close();
-        stmt.close();
-        return retorno;
-    }
-
-    public boolean isConnected() throws SQLException {
-        return !this.conexion.isClosed();
-    }
-
-    public void closeConnection() throws SQLException {
-        this.conexion.close();
-    }
-
     @FunctionalInterface
     public interface Mapper<T> {
         T miMetodoMapper(ResultSet resultSet) throws SQLException;
     }
 
-    public <T> T inTransaction(java.util.concurrent.Callable<T> work) throws SQLException {
-        boolean prev = conexion.getAutoCommit();
-        try {
-            conexion.setAutoCommit(false);
-            T r = work.call();
-            conexion.commit();
-            return r;
-        } catch (Exception e) {
-            conexion.rollback();
-            if (e instanceof SQLException se) throw se;
-            throw new SQLException("Error en transacción", e);
-        } finally {
-            conexion.setAutoCommit(prev);
-        }
+    @FunctionalInterface
+    public interface SQLFunction<Con, Res> {
+        Res apply(Con connection) throws Exception;
     }
+
+
 }

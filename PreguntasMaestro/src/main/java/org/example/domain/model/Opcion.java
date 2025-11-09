@@ -11,7 +11,7 @@ public class Opcion {
         this.texto = texto;
         this.opcion = opcion;
         this.correcta = correcta;
-    }
+        }
 
     public Long getId() {
         return id;
@@ -28,4 +28,10 @@ public class Opcion {
     public boolean isCorrecta() {
         return correcta;
     }
+
+    @Override
+    public String toString() {
+        return String.format("[ %c ] %s", this.opcion, this.texto);
+    }
+
 }

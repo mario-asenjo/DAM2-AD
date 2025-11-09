@@ -1,0 +1,349 @@
+1. ¿Qué es un sistema de archivos?
+A. Una red de dispositivos de almacenamiento.
+B. Un método para organizar y almacenar archivos en un dispositivo.
+C. Un conjunto de aplicaciones de ofimática.
+D. Un tipo de virus.
+RESPUESTA: B
+
+2. ¿Qué hace el comando "cd" en una consola?
+A. Cierra el directorio actual.
+B. Copia documentos.
+C. Cambia el directorio actual.
+D. Conecta a un servidor.
+RESPUESTA: C
+
+3. ¿Qué es una función en programación?
+A. Una base de datos.
+B. Una instrucción única.
+C. Un bloque reutilizable de código que realiza una tarea.
+D. Un archivo ejecutable.
+RESPUESTA: C
+
+4. ¿Cuál de estos es un lenguaje de programación compilado?
+A. Python.
+B. JavaScript.
+C. C++.
+D. HTML.
+RESPUESTA: C
+
+5. ¿Qué es una IP pública?
+A. Una IP usada internamente por routers.
+B. Una dirección visible en internet que identifica a una red.
+C. Una dirección que no existe realmente.
+D. Una dirección usada solo por servidores DNS.
+RESPUESTA: B
+
+6. ¿Qué hace un sistema de control de versiones?
+A. Mejora la velocidad de las aplicaciones.
+B. Controla accesos al hardware.
+C. Permite gestionar cambios en el código fuente.
+D. Detecta virus en tiempo real.
+RESPUESTA: C
+
+7. ¿Qué es una clase en programación orientada a objetos?
+A. Una tabla de una base de datos.
+B. Un conjunto de instrucciones sin lógica.
+C. Una plantilla para crear objetos.
+D. Un tipo de error en compilación.
+RESPUESTA: C
+
+8. ¿Cuál es la extensión típica de un archivo Java compilado?
+A. .js
+B. .exe
+C. .java
+D. .class
+RESPUESTA: D
+
+9. ¿Cuál es el propósito del protocolo FTP?
+A. Transferencia de archivos.
+B. Comunicación entre dispositivos Bluetooth.
+C. Correos electrónicos.
+D. Videollamadas.
+RESPUESTA: A
+
+10. ¿Qué es una variable?
+A. Un valor fijo.
+B. Un tipo de base de datos.
+C. Un espacio en memoria donde se almacena un valor.
+D. Un tipo de red.
+RESPUESTA: C
+
+11. ¿Qué es una excepción en programación?
+A. Un mensaje de éxito.
+B. Un tipo de bucle.
+C. Un error que puede ocurrir durante la ejecución.
+D. Un método especial.
+RESPUESTA: C
+
+12. ¿Qué hace el método "main" en Java?
+A. Borra datos.
+B. Conecta a la red.
+C. Inicia la ejecución del programa.
+D. Cierra la aplicación.
+RESPUESTA: C
+
+13. ¿Qué es una pila (stack)?
+A. Una lista con acceso aleatorio.
+B. Un modelo FIFO.
+C. Una estructura LIFO.
+D. Un búfer de red.
+RESPUESTA: C
+
+14. ¿Qué es un bucle while?
+A. Un tipo de variable.
+B. Una instrucción condicional.
+C. Una estructura que repite mientras se cumpla una condición.
+D. Una clase especial.
+RESPUESTA: C
+
+15. ¿Qué comando se usa para compilar un archivo Java?
+A. java
+B. javac
+C. compile
+D. exec
+RESPUESTA: B
+
+16. ¿Qué es una red LAN?
+A. Red de área nacional.
+B. Red de baja calidad.
+C. Red local de computadoras.
+D. Red satelital.
+RESPUESTA: C
+
+17. ¿Qué hace el comando mkdir?
+A. Crea un archivo.
+B. Mueve un archivo.
+C. Crea un directorio.
+D. Borra un archivo.
+RESPUESTA: C
+
+18. ¿Qué es un booleano?
+A. Un tipo de bucle.
+B. Un tipo de estructura de datos.
+C. Un tipo de dato con dos valores posibles: true o false.
+D. Una clase de red.
+RESPUESTA: C
+
+19. ¿Qué tipo de lenguaje es SQL?
+A. Imperativo.
+B. Funcional.
+C. De marcado.
+D. De consulta estructurada.
+RESPUESTA: D
+
+20. ¿Qué representa HTML?
+A. Hyper Text Markup Language.
+B. High Text Machine Logic.
+C. Home Tool Management Language.
+D. Hyper Transfer Mark Logic.
+RESPUESTA: A
+
+21. ¿Qué extensión tiene un archivo ejecutable en Windows?
+A. .class
+B. .bat
+C. .exe
+D. .sh
+RESPUESTA: C
+
+22. ¿Qué es una librería en programación?
+A. Un conjunto de errores.
+B. Un IDE.
+C. Un conjunto de funciones reutilizables.
+D. Un sistema operativo.
+RESPUESTA: C
+
+23. ¿Qué significa CRUD?
+A. Create, Run, Undo, Delete.
+B. Create, Read, Update, Delete.
+C. Compile, Reduce, Update, Download.
+D. Copy, Read, Upload, Download.
+RESPUESTA: B
+
+24. ¿Qué es un algoritmo?
+A. Un virus informático.
+B. Una red de computadoras.
+C. Una secuencia de pasos para resolver un problema.
+D. Un lenguaje de programación.
+RESPUESTA: C
+
+25. ¿Qué hace una tabla en una base de datos relacional?
+A. Guarda imágenes.
+B. Guarda datos en filas y columnas.
+C. Muestra gráficos.
+D. Ejecuta código SQL automáticamente.
+RESPUESTA: B
+
+26. ¿Qué es un IDE?
+A. Un lenguaje de bajo nivel.
+B. Un entorno de desarrollo integrado.
+C. Un compilador.
+D. Un sistema de control de versiones.
+RESPUESTA: B
+
+27. ¿Qué hace el comando "ls" en Unix/Linux?
+A. Borra archivos.
+B. Lista archivos y carpetas.
+C. Instala programas.
+D. Ejecuta scripts.
+RESPUESTA: B
+
+28. ¿Cuál es el objetivo de la encapsulación?
+A. Ejecutar código más rápido.
+B. Compartir variables globales.
+C. Ocultar detalles internos y proteger datos.
+D. Dividir la red.
+RESPUESTA: C
+
+29. ¿Qué es un constructor en Java?
+A. Un método para destruir un objeto.
+B. Un método que se llama al crear un objeto.
+C. Una interfaz.
+D. Un tipo de bucle.
+RESPUESTA: B
+
+30. ¿Qué hace el operador "==" en la mayoría de lenguajes?
+A. Suma dos valores.
+B. Declara una variable.
+C. Asigna valores.
+D. Compara si dos valores son iguales.
+RESPUESTA: D
+
+31. ¿Qué significa open-source?
+A. Software que no requiere memoria.
+B. Software que es gratuito para usuarios domésticos.
+C. Software con código disponible para ser modificado.
+D. Software solo para empresas.
+RESPUESTA: C
+
+32. ¿Qué tipo de error es un NullPointerException en Java?
+A. Error de compilación.
+B. Error de conexión.
+C. Error de ejecución al acceder a un objeto nulo.
+D. Error de configuración del sistema.
+RESPUESTA: C
+
+33. ¿Qué es un array?
+A. Una clase especial.
+B. Una variable.
+C. Una estructura que almacena múltiples valores del mismo tipo.
+D. Una función de red.
+RESPUESTA: C
+
+34. ¿Qué tipo de lenguaje es Java?
+A. Lenguaje de bajo nivel.
+B. Lenguaje de marcado.
+C. Lenguaje de programación orientado a objetos.
+D. Lenguaje ensamblador.
+RESPUESTA: C
+
+35. ¿Qué significa "debuggear" un programa?
+A. Compilar código.
+B. Buscar errores y solucionarlos.
+C. Instalar software.
+D. Traducir código a otro idioma.
+RESPUESTA: B
+
+36. ¿Qué es una interfaz en Java?
+A. Una clase abstracta obligatoria.
+B. Un archivo ejecutable.
+C. Un contrato que define métodos sin implementar.
+D. Un tipo de error.
+RESPUESTA: C
+
+37. ¿Qué hace un router?
+A. Almacena archivos.
+B. Procesa datos gráficos.
+C. Dirige el tráfico de red entre dispositivos.
+D. Mejora la velocidad de la CPU.
+RESPUESTA: C
+
+38. ¿Qué significa JVM?
+A. Java Virtual Machine.
+B. Java Value Method.
+C. Java Variable Manager.
+D. Java Visual Mode.
+RESPUESTA: A
+
+39. ¿Qué hace un analista de sistemas?
+A. Diseña placas electrónicas.
+B. Programa videojuegos.
+C. Analiza necesidades y define soluciones tecnológicas.
+D. Arregla impresoras.
+RESPUESTA: C
+
+40. ¿Qué hace el método println() en Java?
+A. Ejecuta un proceso externo.
+B. Lee datos del usuario.
+C. Imprime texto en pantalla con salto de línea.
+D. Guarda archivos.
+RESPUESTA: C
+
+41. ¿Qué estructura permite almacenar pares clave-valor?
+A. Array.
+B. Stack.
+C. HashMap.
+D. Lista.
+RESPUESTA: C
+
+42. ¿Qué es una condición en programación?
+A. Una clase que genera errores.
+B. Una función especial.
+C. Una expresión lógica que evalúa verdadero o falso.
+D. Un archivo de configuración.
+RESPUESTA: C
+
+43. ¿Qué hace el operador "+" en Java cuando se usa con Strings?
+A. Resta caracteres.
+B. Convierte en mayúsculas.
+C. Concatena textos.
+D. Elimina espacios.
+RESPUESTA: C
+
+44. ¿Qué es un ciclo infinito?
+A. Un error de compilación.
+B. Un bucle que nunca se detiene.
+C. Una clase repetida.
+D. Un tipo de variable.
+RESPUESTA: B
+
+45. ¿Qué es una base de datos?
+A. Una función matemática.
+B. Un conjunto organizado de datos.
+C. Un tipo de red.
+D. Un sistema operativo.
+RESPUESTA: B
+
+46. ¿Qué permite el operador && en Java?
+A. Sumar booleanos.
+B. Comparar textos.
+C. Realizar una conjunción lógica (AND).
+D. Multiplicar valores.
+RESPUESTA: C
+
+47. ¿Qué es una tabla hash?
+A. Un tipo de memoria volátil.
+B. Una clase especial para archivos.
+C. Una estructura que almacena datos por clave hash.
+D. Un sistema de archivos comprimidos.
+RESPUESTA: C
+
+48. ¿Qué es el código fuente?
+A. Una URL.
+B. Un archivo ejecutable.
+C. El conjunto de instrucciones escritas por el programador.
+D. El hardware del ordenador.
+RESPUESTA: C
+
+49. ¿Qué hace el operador "!" en muchos lenguajes?
+A. Multiplica.
+B. Niega una condición lógica.
+C. Divide.
+D. Muestra errores.
+RESPUESTA: B
+
+50. ¿Qué tipo de bucle ejecuta al menos una vez antes de comprobar la condición?
+A. while
+B. for
+C. do-while
+D. switch
+RESPUESTA: C

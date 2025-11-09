@@ -1,8 +1,10 @@
-package org.example.infra.file;
+package org.example.infra.importer;
 
 import org.example.domain.model.Opcion;
 import org.example.domain.model.Pregunta;
 import org.example.domain.ports.PreguntaImporter;
+import org.example.infra.file.Fichero;
+import org.example.infra.file.errors.LecturaEscrituraException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +27,13 @@ public class FicheroPreguntasImporter implements PreguntaImporter {
     }
 
     @Override
-    public List<Pregunta> parse() {
-        List<String> lectura = fichero.leerFichero();
+    public List<Pregunta> parse() throws LecturaEscrituraException {
+        List<String> lectura = null;
+        try {
+             lectura = fichero.leerFichero();
+        } catch (LecturaEscrituraException e) {
+            throw new LecturaEscrituraException("Error cargando datos desde la fuente.");
+        }
         return parsearLectura(lectura);
     }
 
@@ -43,6 +50,7 @@ public class FicheroPreguntasImporter implements PreguntaImporter {
             idx_p = lectura.get(i).indexOf(".");
             id = Long.parseLong(lectura.get(i).substring(0, idx_p));
             enunciado = lectura.get(i).substring(idx_p + 2);
+            i++;
 
             opcionesSinMarcar = new ArrayList<>(4);
             for (int j = 0; j < 4; j++) {
@@ -59,10 +67,6 @@ public class FicheroPreguntasImporter implements PreguntaImporter {
             }
 
             retorno.add(new Pregunta(id, enunciado, opcionesMarcadas));
-
-            while (i < lectura.size() && lectura.get(i).isBlank()) {
-                i++;
-            }
         }
         return retorno;
     }

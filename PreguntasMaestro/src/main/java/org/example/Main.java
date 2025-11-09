@@ -4,6 +4,6 @@ import org.example.config.AppConfig;
 
 public class Main {
     public static void main(String[] args) {
-        new AppConfig().start();
+        new AppConfig().start(true);
     }
 }

@@ -23,4 +23,14 @@ public class Pregunta {
     public List<Opcion> getOpciones() {
         return opciones;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder mySB = new StringBuilder();
+        mySB.append(this.id).append(". ").append(this.enunciado).append("\n");
+        for (Opcion opcion : this.opciones) {
+            mySB.append(opcion.toString()).append("\n");
+        }
+        return (mySB.toString());
+    }
 }

@@ -1,6 +1,6 @@
 package org.example.infra.file;
-import excepciones.LecturaEscrituraException;
-import vista.Consola;
+
+import org.example.infra.file.errors.LecturaEscrituraException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -31,13 +31,10 @@ public class Fichero {
             lector.close();
             archivo.close();
         } catch (FileNotFoundException e) {
-            Consola.mostrarExcepcion(e);
             throw new LecturaEscrituraException("Error: No se encuentra el fichero en el sistema.");
         } catch (IOException e) {
-            Consola.mostrarExcepcion(e);
             throw new LecturaEscrituraException("Error: Error durante la lectura en el fichero.");
         } catch (Exception e) {
-            Consola.mostrarExcepcion(e);
             throw new LecturaEscrituraException("Error: Error inesperado durante la lectura del fichero.");
         }
         return (lineas);
