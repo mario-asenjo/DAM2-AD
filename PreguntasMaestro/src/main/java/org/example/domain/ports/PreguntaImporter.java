@@ -11,5 +11,5 @@ public interface PreguntaImporter {
      * @param input
      * @return
      */
-    List<Pregunta> parse(Reader lector);
+    List<Pregunta> parse();
 }
