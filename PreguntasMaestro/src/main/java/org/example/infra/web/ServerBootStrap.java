@@ -15,7 +15,6 @@ public class ServerBootStrap {
         );
 
         app.get("/health", ctx -> ctx.result("OK"));
-
         app.start(port);
         System.out.println("HTTP Server on http://localhost:"+port);
     }

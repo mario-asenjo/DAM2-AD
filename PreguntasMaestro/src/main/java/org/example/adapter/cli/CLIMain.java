@@ -15,7 +15,7 @@ public class CLIMain {
         String examenElegido;
 
         AppConfig app = new AppConfig();
-        app.start(false);
+        app.start(true);
 
         List<ExamCatalog.ExamenMeta> examenes = app.listarExamenes();
         if (examenes.isEmpty()) {

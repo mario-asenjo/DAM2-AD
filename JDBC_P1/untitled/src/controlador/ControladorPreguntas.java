@@ -100,12 +100,8 @@ public class ControladorPreguntas {
         char opcion;
         boolean esCorrecta;
 
-<<<<<<< HEAD
         servicioFichero = new ServicioFichero("Data/50preguntasKotlin.txt");
-=======
-        servicioFichero = new ServicioFichero("Data/50preguntasAnimales.txt");
         listaPreguntas = new ListaPreguntas();
->>>>>>> bf9ebdf74709e9f523c1138da70802751908bab5
         try {
             /**
              * Leemos el fichero, cargamos el contenido en ListaPreguntas
