@@ -6,7 +6,7 @@ import java.sql.*;
 public class BBDD {
     private final DataSource dataSource;
 
-    public BBDD(DataSource dataSource) throws SQLException {
+    public BBDD(DataSource dataSource){
         this.dataSource = dataSource;
     }
 

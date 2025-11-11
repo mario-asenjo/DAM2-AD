@@ -22,38 +22,48 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class AppConfig {
+    // Casos de uso
     private ImportarPreguntasService importarPreguntasService;
     private ObtenerPreguntasAleatoriasService obtenerPreguntasAleatoriasService;
     private ComprobarRespuestaService comprobarRespuestaService;
+
+    // Puertos auxiliares
     private ExamCatalog catalog;
     private ImporterFactory importerFactory;
 
-    public AppConfig() {
+    // Infra
+    private DataSource dataSource;
+    private BBDD bd;
 
+    // HTTP Server
+    private ServerBootStrap httpServer;
+
+    public void start(boolean withHttp){
+        String baseDir;
+        dataSource = buildDataSourceFromEnv();
+        bd = new BBDD(dataSource);
+        PreguntaRepository repo = new BBDDPreguntasRepository(bd);
+
+        this.importarPreguntasService =  new ImportarPreguntasService(repo);
+        this.obtenerPreguntasAleatoriasService = new ObtenerPreguntasAleatoriasService(repo);
+        this.comprobarRespuestaService = new ComprobarRespuestaService(repo);
+        baseDir = getenv("EXAMS_DIR", "Data");
+        this.catalog = new FsExamCatalog(Path.of(baseDir), "txt");
+        this.importerFactory = new FicheroImporterFactory(baseDir);
+
+        if (withHttp) {
+            httpServer = new ServerBootStrap();
+            httpServer.start(this,8080);
+        }
+        System.out.println("AppConfig listo. withHttp -> " + withHttp);
     }
 
-    public void start(boolean withHttp) {
-        try {
-            String baseDir;
-            DataSource dataSource = buildDataSourceFromEnv();
-            BBDD bd = new BBDD(dataSource);
-            PreguntaRepository repo = new BBDDPreguntasRepository(bd);
-
-            this.importarPreguntasService =  new ImportarPreguntasService(repo);
-            this.obtenerPreguntasAleatoriasService = new ObtenerPreguntasAleatoriasService(repo);
-            this.comprobarRespuestaService = new ComprobarRespuestaService(repo);
-            baseDir = "Data";
-            this.catalog = new FsExamCatalog(Path.of(baseDir), "txt");
-            this.importerFactory = new FicheroImporterFactory(baseDir);
-
-            if (withHttp) {
-                ServerBootStrap http = new ServerBootStrap();
-                http.start(8080);
-                System.out.println("HTTP /health habilitado en :8080");
-            }
-            System.out.println("AppConfig listo.");
-        } catch (SQLException e) {
-            throw new RuntimeException("Error de SQL.");
+    public void stop() {
+        if (httpServer != null) {
+            httpServer.stop();
+        }
+        if (dataSource instanceof HikariDataSource ds) {
+            ds.close();
         }
     }
 
