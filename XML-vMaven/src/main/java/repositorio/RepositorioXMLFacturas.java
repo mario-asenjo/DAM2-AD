@@ -16,6 +16,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,7 +38,7 @@ public class RepositorioXMLFacturas {
             // Crear documento XML vacío
             Document doc = builder.newDocument();
             // Crear nodo raíz <peliculas>
-            Element root = doc.createElement("peliculas");
+            Element root = doc.createElement("facturas");
             doc.appendChild(root);
 
             // Guardar el documento en disco
@@ -58,7 +59,7 @@ public class RepositorioXMLFacturas {
         transformer.transform(new DOMSource(doc), new StreamResult(f));
     }
 
-    public void guardarFactura(Factura factura) throws FactoryConfigurationError, ParserConfigurationException, IOException, SAXException,
+    public void guardar(Factura factura) throws FactoryConfigurationError, ParserConfigurationException, IOException, SAXException,
             IllegalArgumentException, DOMException, UnsupportedOperationException, ClassCastException, TransformerException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -69,10 +70,10 @@ public class RepositorioXMLFacturas {
         Element root = doc.getDocumentElement();
 
         // Crear nodo <pelicula>
-        Element facturaNode = doc.createElement("facturas");
+        Element facturaNode = doc.createElement("factura");
 
-        Element idNode = doc.createElement("id");
-        idNode.appendChild(doc.createTextNode(String.valueOf(factura.getId())));
+        Attr idNode = doc.createAttribute("id");
+        idNode.appendChild(doc.createAttribute(String.valueOf(factura.getId())));
         facturaNode.appendChild(idNode);
 
         Element cifNode = doc.createElement("cif");
@@ -95,7 +96,7 @@ public class RepositorioXMLFacturas {
         guardarDocumentoFacturas(doc, fichero);
     }
 
-    public List<Factura> listar() throws FactoryConfigurationError, ParserConfigurationException, IOException, SAXException,
+    public List<Factura> listar(String... parametros) throws FactoryConfigurationError, ParserConfigurationException, IOException, SAXException,
             IllegalArgumentException, DOMException, UnsupportedOperationException, ClassCastException {
         List<Factura> lista = new ArrayList<>();
         DocumentBuilderFactory factory;
@@ -103,33 +104,33 @@ public class RepositorioXMLFacturas {
         Document doc;
         NodeList facturas;
 
+
         factory = DocumentBuilderFactory.newInstance();
         builder = factory.newDocumentBuilder();
         doc = builder.parse(fichero);
 
-        facturas = doc.getElementsByTagName("facturas");
+        facturas = doc.getElementsByTagName(parametros[0]);
 
         for (int i = 0; i < facturas.getLength(); i++) {
             Node node = facturas.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element e = (Element) node;
 
-                String id = e.getAttributes().getNamedItem("factura").getTextContent();
-                String cif = e.getElementsByTagName("cif").item(0).getTextContent();
+                String id = e.getAttribute(parametros[1]);
+                String cif = e.getElementsByTagName(parametros[2]).item(0).getTextContent();
 
-                NodeList itemsList = e.getElementsByTagName("items");
+                NodeList itemsList = e.getElementsByTagName(parametros[3]);
                 List<String> items = new ArrayList<>();
                 for (int j = 0; j < itemsList.getLength(); j++) {
                     Node itemNode = itemsList.item(j);
                     if (node.getNodeType() == Node.ELEMENT_NODE) {
                         Element item = (Element) itemNode;
-                        String itemName = item.getElementsByTagName("item").item(0).getTextContent();
+                        String itemName = item.getElementsByTagName(parametros[4]).item(j).getTextContent();
                         items.add(itemName);
                     }
                 }
 
-                String total = e.getElementsByTagName("total").item(0).getTextContent();
-
+                String total = e.getElementsByTagName(parametros[5]).item(0).getTextContent();
                 lista.add(new Factura(id, cif, items, Double.parseDouble(total.substring(0, total.length() - 1)), total.charAt(total.length() - 1)));
             }
         }
@@ -141,22 +142,24 @@ public class RepositorioXMLFacturas {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(fichero);
-
+        NodeList itemsList;
+        String idActual;
+        Element e;
+        Node node;
         NodeList facturasNode = doc.getElementsByTagName("facturas");
 
         for (int i = 0; i < facturasNode.getLength(); i++) {
-            Node node = facturasNode.item(i);
+            node = facturasNode.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
-                Element e = (Element) node;
-                String idActual = e.getElementsByTagName("id").item(0).getTextContent();
+                e = (Element) node;
+                idActual = e.getElementsByTagName("id").item(0).getTextContent();
                 if (idActual.equalsIgnoreCase(factura.getId())) {
                     e.getElementsByTagName("cif").item(0).setTextContent(factura.getCif());
-                    NodeList itemsList = e.getElementsByTagName("items");
+                    itemsList = e.getElementsByTagName("items");
                     for (int j = 0; j < itemsList.getLength(); j++) {
                         e.getElementsByTagName("item").item(0).setTextContent(factura.getItems().get(j));
                     }
                     e.getElementsByTagName("total").item(0).setTextContent(factura.getTotal());
-                    break;
                 }
             }
         }

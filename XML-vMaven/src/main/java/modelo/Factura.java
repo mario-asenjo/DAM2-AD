@@ -42,14 +42,14 @@ public class Factura {
     }
 
     public String getTotal() {
-        return String.format("%.2f %c", total_precio, moneda);
+        return String.format("%,2f %c", total_precio, moneda);
     }
 
     public double getTotal_precio() {
         return total_precio;
     }
 
-    public char getMoneda() {
+    private char getMoneda() {
         return moneda;
     }
 
@@ -63,6 +63,6 @@ public class Factura {
 
     @Override
     public String toString() {
-        return String.format("Factura -> %s\n\tCIF: %s\n\tItems:\n\t%s\n\tTotal: %.2f€", this.cif, itemsToString(), getTotal());
+        return String.format("Factura: %s \n\tCIF: %s \n\tItems: \n\t%s \n\tTotal: %s\n\t", this.id, this.cif, itemsToString(), getTotal());
     }
 }

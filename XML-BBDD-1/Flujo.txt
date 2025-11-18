@@ -1,0 +1,5 @@
+1 -> Se pregunta al usuario si quiere usar XML o la BBDD.
+
+2 -> MENU CRUD POKEMON Y ENTRENADOR -> Para cada repo. (Sin ID por filtro).
+3 -> Si elim o modif por titulo y hay más de 1 con el mismo, se pregunta otro atributo para filtrar)
+

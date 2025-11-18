@@ -1,13 +1,9 @@
 package repositorio;
 
-import utils.DBConnection;
-
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BBDD {
-    Connection conexion;
+    private Connection conexion;
 
     public BBDD(Connection conexion) throws SQLException {
         this.conexion = conexion;

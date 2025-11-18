@@ -4,16 +4,14 @@ import excepciones.LecturaEscrituraException;
 import excepciones.NumeroNoValidoException;
 import excepciones.StringNoValidoException;
 import modelo.ListaPreguntas;
-import modelo.Pregunta;
-import servicio.ServicioBD;
-import servicio.ServicioFichero;
+import servicio.ServicioBDPreguntas;
+import servicio.ServicioFicheroPreguntas;
 import vista.Colores;
 import vista.Consola;
 import vista.Escaner;
 
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.InputMismatchException;
 import java.util.Map;
 
 public class ControladorPreguntas {
@@ -90,17 +88,19 @@ public class ControladorPreguntas {
     }
 
     public static void iniciar() {
-        ServicioFichero servicioFichero;
+        ServicioFicheroPreguntas servicioFichero;
         ListaPreguntas listaPreguntas;
-        ServicioBD servicioBD;
-        int numeroPreguntas;
+        ServicioBDPreguntas servicioBD;
+        String numeroPreguntas;
+        int registrosCargadosEnLaBD;
+        int opcionesCargadasEnLaBD;
         int preguntasCargadasEnLaBD;
         boolean modoExamen;
         Map<String, Boolean> resultados;
         char opcion;
         boolean esCorrecta;
 
-        servicioFichero = new ServicioFichero("Data/50preguntasKotlin.txt");
+        servicioFichero = new ServicioFicheroPreguntas("Data/50preguntasInformatica.txt");
         listaPreguntas = new ListaPreguntas();
         try {
             /**
@@ -108,18 +108,20 @@ public class ControladorPreguntas {
              * Cargamos en la BBDD las preguntas leidas del fichero.
              */
             listaPreguntas.setListaDePreguntas(servicioFichero.leer());
-            servicioBD = new ServicioBD();
+            servicioBD = new ServicioBDPreguntas();
             servicioBD.eliminarContenidoSiHubiese();
-            preguntasCargadasEnLaBD = servicioBD.insertarPreguntas(listaPreguntas.getListaDePreguntas());
-            Consola.mostrarFraseEndl(String.format("Se han cargado %d registros en la BBDD.", preguntasCargadasEnLaBD), Colores.VERDE);
+            registrosCargadosEnLaBD = servicioBD.insertarPreguntas(listaPreguntas.getListaDePreguntas());
+            preguntasCargadasEnLaBD = registrosCargadosEnLaBD / 5;
+            opcionesCargadasEnLaBD = preguntasCargadasEnLaBD * 4;
+            Consola.mostrarFraseEndl(String.format("Se han cargado %d registros en la BBDD.\n\t%d Preguntas y %d Opciones\n", registrosCargadosEnLaBD, preguntasCargadasEnLaBD, opcionesCargadasEnLaBD), Colores.VERDE);
 
             /**
              * Pedimos al usuario un número de preguntas a devolver de la
              * BBDD en orden aleatorio y las guardamos en nuestra ListaPreguntas.
              */
-            numeroPreguntas = Escaner.pedirEntero("Introduce un número de preguntas: ");
-            Validaciones.validarEntero(String.valueOf(numeroPreguntas), "^(?:[1-9]|[1-9][0-9]{1,2}|1000)$");
-            listaPreguntas.setListaDePreguntas(servicioBD.devolverSeleccionPreguntas(numeroPreguntas));
+            numeroPreguntas = Escaner.pedirString("Introduce un número de preguntas: ");
+            Validaciones.validarEntero(numeroPreguntas, "^(?:[1-9]|[1-9][0-9]{1,2}|1000)$");
+            listaPreguntas.setListaDePreguntas(servicioBD.devolverSeleccionPreguntas(Integer.parseInt(numeroPreguntas)));
 
             /**
              * Preguntamos al usuario si está ejecutando en modo examen o
@@ -137,6 +139,7 @@ public class ControladorPreguntas {
             for (int i = 0; i < listaPreguntas.getListaDePreguntas().size(); i++) {
                 Consola.mostrarFraseEndl(listaPreguntas.getListaDePreguntas().get(i).toString());
                 opcion = Escaner.pedirChar("Introduce una opcion: ");
+                Validaciones.validarString(String.valueOf(opcion), 1, 1, "^[a-dA-D]$");
                 esCorrecta = servicioBD.esOpcionCorrecta(opcion, listaPreguntas.getListaDePreguntas().get(i).getId());
                 resultados.put(listaPreguntas.getListaDePreguntas().get(i).getEnunciado(), esCorrecta);
                 i += mostrarRespuesta(modoExamen, esCorrecta);

@@ -1,5 +1,6 @@
 package vista;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Consola {
@@ -25,6 +26,7 @@ public class Consola {
 
     public static void mostrarExcepcion(Throwable e) {
         mostrarFraseEndl("[!] Excepcion: " + e.getMessage(), Colores.ROJO);
+        mostrarFraseEndl("[!] Traza: " + Arrays.toString(e.getStackTrace()));
     }
 
     public static void mostrarMenu(List<String> opciones) {
@@ -41,10 +43,11 @@ public class Consola {
         }
     }
 
-    public static void mostrarArrayListObj(List<Object> listaObjetos) {
+    public static <T> void mostrarArrayListObj(List<T> listaObjetos) {
         mostrarFraseEndl("[+] Lista de Objetos:");
         for (int i = 0; i < listaObjetos.size(); i++) {
             mostrarFraseEndl(String.format("[%d] %s", i, listaObjetos.get(i).toString()));
         }
+        mostrarFraseEndl("[+] Fin lista Objetos");
     }
 }

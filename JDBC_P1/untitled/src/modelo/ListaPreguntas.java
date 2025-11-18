@@ -1,10 +1,7 @@
 package modelo;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-import java.util.random.RandomGenerator;
 
 public class ListaPreguntas {
     private List<Pregunta> listaDePreguntas;

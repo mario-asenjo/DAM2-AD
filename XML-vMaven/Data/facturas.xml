@@ -1,18 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <facturas>
+        
     <factura id="0001/25">
+                
         <cif>12345678F</cif>
+                
         <items>
+                        
             <item>consultoria</item>
+                        
             <item>reparacion</item>
+                    
         </items>
+                
         <total>100.99€</total>
+            
     </factura>
+        
     <factura id="0002/25">
+                
         <cif>91234756F</cif>
+                
         <items>
+                        
             <item>informatica</item>
+                        
             <item>mantenimiento</item>
+                    
         </items>
+                
         <total>50.50$</total>
+            
     </factura>
+
 </facturas>

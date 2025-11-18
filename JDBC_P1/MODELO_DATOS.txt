@@ -1,3 +1,6 @@
+--------------------------------------------------------
+TABLAS:
+-------
 CREATE TABLE PREGUNTAS (
 	ID INT AUTO_INCREMENT PRIMARY KEY,
 	ENUNCIADO VARCHAR(200)
@@ -6,15 +9,50 @@ CREATE TABLE PREGUNTAS (
 CREATE TABLE OPCION (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     TEXTO VARCHAR(100),
------
-    OPCION ENUM('A', 'B', 'C', 'D'), 
-//Esto me obliga a que el fichero venga  con  las opciones como A., B., C. etc, cuando realmente si Carlos tiene un fichero con las respuestas con  1., 2., 3., no valdría.
-//Así que cualquiera de  estas  dos opciones valdría. (Arriba, o  abajo de este comentario).
-     OPCION CHAR(1),
------
+    OPCION CHAR(1),
     CORRECTA INT(1) DEFAULT 0,
     ID_PREGUNTA INT,
-    FOREIGN KEY('ID_PREGUNTA') REFERENCES PREGUNTAS('ID')
+    FOREIGN KEY(ID_PREGUNTA) REFERENCES PREGUNTAS(ID)
     	ON DELETE CASCADE
     	ON UPDATE CASCADE
 );
+
+--------------------------------------------------------
+VISTAS:
+-------
+
+CREATE OR REPLACE VIEW preguntas_desordenadas AS
+SELECT p.ID AS P_ID, p.ENUNCIADO AS P_ENUNCIADO, O.ID AS O_ID, O.TEXTO AS O_TEXTO, O.OPCION AS O_OPCION, O.CORRECTA AS O_CORRECTA
+FROM PREGUNTAS P INNER JOIN OPCION O
+ON P.ID = O.ID_PREGUNTA;
+
+CREATE OR REPLACE VIEW preguntas_desordenadas AS
+SELECT p.*
+FROM preguntas_respuestas p
+JOIN (
+    SELECT P_ID, RAND() AS rnd
+    FROM preguntas_respuestas
+    GROUP BY P_ID
+) r
+ON p.P_ID = r.P_ID
+ORDER BY r.rnd, p.P_ID, p.O_OPCION;
+
+---------------------------------------------------------
+PERSONAL CON JAVALIN Y DTO:
+---------------------------
+
+CREATE OR REPLACE VIEW preguntas_respuestas AS
+SELECT P.ID, P.ENUNCIADO, O.TEXTO, O.OPCION, O.ESCORRECTA
+FROM PREGUNTA P INNER JOIN OPCION O
+ON P.ID = O.ID_PREGUNTA;
+
+CREATE OR REPLACE VIEW preguntas_desordenadas AS
+SELECT p.*
+FROM preguntas_respuestas p
+JOIN (
+    SELECT ID, RAND() AS rnd
+    FROM preguntas_respuestas
+    GROUP BY ID
+) r
+ON p.ID = r.ID
+ORDER BY r.rnd, p.ID, p.OPCION;

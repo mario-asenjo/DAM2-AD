@@ -4,21 +4,15 @@ import modelo.Opcion;
 import modelo.Pregunta;
 import repositorio.BBDD;
 import utils.DBConnection;
-import vista.Colores;
-import vista.Consola;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class ServicioBD {
+public class ServicioBDPreguntas {
     private final BBDD repo;
 
-    public ServicioBD() throws SQLException {
+    public ServicioBDPreguntas() throws SQLException {
         repo = new BBDD(DBConnection.getConnection());
     }
 
@@ -74,8 +68,6 @@ public class ServicioBD {
                 respuestasInsertadas += repo.ejecutarDML(insertOpcion, opcion.getId(), opcion.getTexto(), opcion.getOpcion(), opcion.isEsCorrecta(), pregunta.getId());
             }
         }
-        Consola.mostrarFraseEndl(String.format("Preguntas Insertadas: %d \n Respuestas Insertadas: %d\n",
-                                    preguntasInsertadas, respuestasInsertadas), Colores.VERDE);
         return (preguntasInsertadas + respuestasInsertadas);
     }
 

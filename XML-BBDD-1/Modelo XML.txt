@@ -1,0 +1,37 @@
+<ligaPokemon>
+    <entrenadores>
+        <entrenador id="1">
+            <nombre>Ash Ketchum</nombre>
+            <pueblo>Pueblo Paleta</pueblo>
+            <edad>10</edad>
+            <pokemons>
+                <pokemon id="1">
+                    <especie>Pikachu</especie>
+                    <nombre>Pikachu</nombre>
+                    <tipo>Eléctrico</tipo>
+                    <nivel>25</nivel>
+                </pokemon>
+                <pokemon id="2">
+                    <especie>Charizard</especie>
+                    <nombre>Charizard</nombre>
+                    <tipo>Fuego</tipo>
+                    <nivel>36</nivel>
+                </pokemon>
+            </pokemons>
+        </entrenador>
+
+        <entrenador id="2">
+            <nombre>Misty</nombre>
+            <pueblo>Ciudad Celeste</pueblo>
+            <edad>10</edad>
+            <pokemons>
+                <pokemon id="3">
+                    <especie>Staryu</especie>
+                    <nombre>Staryu</nombre>
+                    <tipo>Agua</tipo>
+                    <nivel>18</nivel>
+                </pokemon>
+            </pokemons>
+        </entrenador>
+    </entrenadores>
+</ligaPokemon>
