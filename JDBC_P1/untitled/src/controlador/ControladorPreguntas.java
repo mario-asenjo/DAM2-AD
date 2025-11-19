@@ -113,7 +113,11 @@ public class ControladorPreguntas {
             registrosCargadosEnLaBD = servicioBD.insertarPreguntas(listaPreguntas.getListaDePreguntas());
             preguntasCargadasEnLaBD = registrosCargadosEnLaBD / 5;
             opcionesCargadasEnLaBD = preguntasCargadasEnLaBD * 4;
-            Consola.mostrarFraseEndl(String.format("Se han cargado %d registros en la BBDD.\n\t%d Preguntas y %d Opciones\n", registrosCargadosEnLaBD, preguntasCargadasEnLaBD, opcionesCargadasEnLaBD), Colores.VERDE);
+            Consola.mostrarFraseEndl(
+                    String.format(
+                            "Se han cargado %d registros en la BBDD.\n\t%d Preguntas y %d Opciones\n",
+                            registrosCargadosEnLaBD, preguntasCargadasEnLaBD, opcionesCargadasEnLaBD),
+                    Colores.VERDE);
 
             /**
              * Pedimos al usuario un número de preguntas a devolver de la

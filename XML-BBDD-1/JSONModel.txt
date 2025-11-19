@@ -1,0 +1,16 @@
+{
+	"videojuegos": [
+		"videojuego": {
+				"id": 1,
+				"nombre": "LinkMaster",
+				"puntuación": 9500,
+				"videojuego_id": "1"
+		},
+		"videojuego": {
+				"id": 2,
+				"nombre": "LMaster",
+				"puntuación": 9000,
+				"videojuego_id": "1"
+		}
+	]
+}

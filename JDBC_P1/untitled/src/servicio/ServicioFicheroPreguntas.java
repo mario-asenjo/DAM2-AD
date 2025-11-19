@@ -42,7 +42,6 @@ public class ServicioFicheroPreguntas {
             opcionesMarcadas = new ArrayList<>(4);
             for (Opcion op : opcionesSinMarcar) {
                 opcionesMarcadas.add(new Opcion(op.getId(), op.getTexto(), op.getOpcion(), op.getOpcion() == correcta));
-
             }
 
             retorno.add(new Pregunta(id, enunciado, opcionesMarcadas));
