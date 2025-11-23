@@ -1,0 +1,19 @@
+[
+  {
+    "id": 1,
+    "nombre": "Mario",
+    "pueblo": "HojaSuave",
+    "edad": 23,
+    "pokedex": {
+      "cantidad_pokemons_totales": 20,
+      "pokemons_obtenidos": [
+        {
+          "id": 1,
+          "nombre": "Pikachu",
+          "tipo": "Rayo",
+          "nivel": 22
+        }
+      ]
+    }
+  }
+]
