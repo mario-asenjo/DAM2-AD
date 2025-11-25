@@ -6,6 +6,7 @@
     "edad": 23,
     "pokedex": {
       "cantidad_pokemons_totales": 20,
+      "cantidad_pokemons_actual": 0,
       "pokemons_obtenidos": [
         {
           "id": 1,

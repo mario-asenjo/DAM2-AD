@@ -12,4 +12,40 @@ public class Pokemon {
         this.tipo = tipo;
         this.nivel = nivel;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public int getNivel() {
+        return nivel;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setNivel(int nivel) {
+        this.nivel = nivel;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Pokemon -> ID: %d, Nombre: %s, Tipo: %s, Nivel: %d", id, nombre, tipo, nivel);
+    }
 }

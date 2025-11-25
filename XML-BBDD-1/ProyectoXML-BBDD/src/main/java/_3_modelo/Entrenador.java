@@ -15,6 +15,13 @@ public class Entrenador {
         this.pokedex = pokedex;
     }
 
+    public Entrenador(long id, String nombre, String pueblo, int edad) {
+        this.id = id;
+        this.nombre = nombre;
+        this.pueblo = pueblo;
+        this.edad = edad;
+    }
+
     public long getId() {
         return this.id;
     }
@@ -43,8 +50,12 @@ public class Entrenador {
         this.edad = edad;
     }
 
+    public Pokedex getPokedex() {
+        return this.pokedex;
+    }
+
     @Override
     public String toString() {
-        return String.format("ID -> [%d] - Entrenador : %s - Pueblo -> %s\n\t", this.id, this.nombre, this.pueblo);
+        return String.format("ENTRENADOR -> ID: %d, Nombre: %s, Edad: %d, Pueblo: %s {\n\t%s}", id, nombre, edad, pueblo, pokedex.toString());
     }
 }

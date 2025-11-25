@@ -89,9 +89,9 @@ public class AppConfig {
     // ==== Internos ====
 
     private DataSource buildDataSourceFromEnv() {
-        String url  = getenv("DB_URL",  "jdbc:mysql://localhost:3306/jdbc_preguntas_buena?useSSL=false&serverTimezone=UTC");
-        String user = getenv("DB_USER", "jdbcuser");
-        String pass = getenv("DB_PASS", "12345");
+        String url  = getenv("DB_URL",  "jdbc:mysql://localhost:3306/jdbc_preguntas_maestra?useSSL=false&serverTimezone=UTC");
+        String user = getenv("DB_USER", "jdbcuser1");
+        String pass = getenv("DB_PASS", "123456");
 
         HikariConfig cfg = new HikariConfig();
         cfg.setJdbcUrl(url);

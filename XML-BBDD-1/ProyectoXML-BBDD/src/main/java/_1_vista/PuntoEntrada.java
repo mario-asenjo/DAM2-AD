@@ -29,6 +29,7 @@ public class PuntoEntrada {
         try {
             repo.guardar(prueba);
             Consola.mostrarFraseEndl(repo.buscarPorId(1).toString(), Colores.VERDE);
+            Consola.mostrarFraseEndl(prueba.toString(), Colores.AZUL);
         } catch (Exception e) {
             Consola.mostrarExcepcion(e);
         }
