@@ -1,4 +1,4 @@
 package _5_servicio;
 
-public class ServicioEntrenadorMongoDB {
+public class ServicioEntrenadorMongoDB implements ServicioEntrenador {
 }

@@ -1,4 +1,12 @@
 package _5_servicio;
 
-public class ServicioEntrenadorMySQL {
+import _4_repositorio.RepositorioEntrenador;
+import _4_repositorio.RepositorioEntrenadorMySQL;
+
+public class ServicioEntrenadorMySQL implements ServicioEntrenador {
+    private final RepositorioEntrenador repo;
+
+    public ServicioEntrenadorMySQL() {
+        this.repo = new RepositorioEntrenadorMySQL();
+    }
 }

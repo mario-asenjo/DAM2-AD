@@ -1,37 +1,49 @@
 package _1_vista;
 
-import _3_modelo.Entrenador;
+import _2_controlador.*;
 import _3_modelo.Pokedex;
-import _3_modelo.Pokemon;
-import _4_repositorio.*;
 
 import java.util.List;
 
 public class PuntoEntrada {
-    private final RepositorioEntrenador repo;
+    private final ControladorEntrenador controlador;
 
     public PuntoEntrada() {
-        Consola.mostrarMenu(List.of("Elige el repositorio a utilizar:", "Repo XML.", "Repo MySQL.", "Repo JSON.", "Repo MongoDB."));
+        Consola.mostrarFraseEndl("Elige el repositorio a utilizar:", Colores.VERDE);
+        Consola.mostrarMenu(List.of("Repo XML.", "Repo MySQL.", "Repo JSON.", "Repo MongoDB."));
         int opcionRepo = Escaner.pedirEntero("Introduce tu opcion: ");
         switch (opcionRepo) {
-            // case 1 -> repo = new RepositorioEntrenadorXML();
-            // case 2 -> repo = new RepositorioEntrenadorMySQL();
-            case 3 -> repo = new RepositorioEntrenadorJSON("datos/json_salida.json", "datos/json_salida.json");
-            // case 4 -> repo = new RepositorioEntrenadorMongoDB();
-            default -> repo = null;
+            case 1 -> controlador = new ControladorEntrenadorXML();
+            case 2 -> controlador = new ControladorEntrenadorMySQL();
+            case 3 -> controlador = new ControladorEntrenadorJSON();
+            case 4 -> controlador = new ControladorEntrenadorMongoDB();
+            default -> controlador = null;
         }
     }
 
     public void iniciar() {
-        Entrenador prueba = new Entrenador(1,"Mario", "HojaSuave", 23,
-                                new Pokedex(20,
-                                    List.of(new Pokemon(1, "Pikachu", "Rayo", 22))));
-        try {
-            repo.guardar(prueba);
-            Consola.mostrarFraseEndl(repo.buscarPorId(1).toString(), Colores.VERDE);
-            Consola.mostrarFraseEndl(prueba.toString(), Colores.AZUL);
-        } catch (Exception e) {
-            Consola.mostrarExcepcion(e);
+        boolean salir;
+        int opcion_operacion;
+
+        if (controlador == null) {
+            Consola.mostrarFraseEndl("No has elegido un repositorio correcto. Saliendo del programa.", Colores.ROJO);
+        } else {
+            salir = false;
+
+            Consola.mostrarFraseEndl("##### PROGRAMA DE ENTRENADORES POKEMON #####");
+            do {
+                Consola.mostrarFraseEndl("OPERACIONES: ");
+                Consola.mostrarMenu(List.of("Crear entrenador pokemon.", "Buscar un entrenador pokemon.", "Actualizar datos de entrenador pokemon.", "Borrar entrenador pokemon.", "Salir del programa."));
+                opcion_operacion = Escaner.pedirEntero("Introduce tu opcion: ");
+                switch (opcion_operacion) {
+                    case 1 -> controlador.crearEntrenador();
+                    case 2 -> controlador.buscarEntrenador();
+                    case 3 -> controlador.actualizarEntrenador();
+                    case 4 -> controlador.borrarEntrenador();
+                    case 5 -> salir = true;
+                }
+            } while (!salir);
+            Consola.mostrarFraseEndl("Saliendo del programa gracias!", Colores.VERDE);
         }
     }
 }
