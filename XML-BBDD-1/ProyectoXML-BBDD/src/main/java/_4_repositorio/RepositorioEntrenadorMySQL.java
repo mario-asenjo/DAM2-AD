@@ -22,6 +22,10 @@ public class RepositorioEntrenadorMySQL implements RepositorioEntrenador {
     @Override
     public void guardar(Entrenador entrenador) throws Exception {
 
+        /*
+        * UNA VEZ HECHA LA LÓGICA
+        * SETEAR EL ID DE entrenador AL ID puesto en la BD.
+        */
     }
 
     @Override

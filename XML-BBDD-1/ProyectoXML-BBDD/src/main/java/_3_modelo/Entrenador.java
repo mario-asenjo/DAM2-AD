@@ -1,7 +1,7 @@
 package _3_modelo;
 
 public class Entrenador {
-    private final long id;
+    private long id;
     private String nombre;
     private String pueblo;
     private int edad;
@@ -24,6 +24,10 @@ public class Entrenador {
 
     public long getId() {
         return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNombre() {
