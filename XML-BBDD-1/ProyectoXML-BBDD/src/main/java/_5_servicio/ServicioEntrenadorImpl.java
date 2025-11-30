@@ -31,6 +31,11 @@ public class ServicioEntrenadorImpl implements ServicioEntrenador {
     }
 
     @Override
+    public Entrenador buscarEntrenadorPorNombre(String nombre) throws Exception {
+        return repo.buscarPorNombre(nombre);
+    }
+
+    @Override
     public void actualizarEntrenador(Entrenador entrenador) throws Exception {
         repo.actualizar(entrenador);
     }

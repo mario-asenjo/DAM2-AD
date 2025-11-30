@@ -4,48 +4,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pokedex {
-    private int cantidad_pokemons_totales;
-    private int cantidad_pokemons_actual;
-    private List<Pokemon> pokemons_obtenidos;
+    private int cantidadPokemonsTotales;
+    private int cantidadPokemonsActual;
+    private List<Pokemon> pokemonsObtenidos;
 
-    public Pokedex(int cantidad_pokemons_totales, List<Pokemon> pokemons_obtenidos) {
-        this.cantidad_pokemons_totales = cantidad_pokemons_totales;
-        this.cantidad_pokemons_actual = 0;
-        this.pokemons_obtenidos = new ArrayList<>(pokemons_obtenidos);
+    public Pokedex(int cantidadPokemonsTotales, List<Pokemon> pokemonsObtenidos) {
+        this.cantidadPokemonsTotales = cantidadPokemonsTotales;
+        this.cantidadPokemonsActual = 0;
+        this.pokemonsObtenidos = new ArrayList<>(pokemonsObtenidos);
     }
 
     public int getCantidad_pokemons_totales() {
-        return cantidad_pokemons_totales;
+        return cantidadPokemonsTotales;
     }
 
     public List<Pokemon> getPokemons_obtenidos() {
-        return pokemons_obtenidos;
+        return pokemonsObtenidos;
     }
 
     public void addPokemon(Pokemon pokemon) throws NullPointerException, ClassCastException, IllegalArgumentException, UnsupportedOperationException {
-        pokemons_obtenidos.add(pokemon);
-        cantidad_pokemons_actual++;
+        if (pokemon != null) {
+            pokemonsObtenidos.add(pokemon);
+            cantidadPokemonsActual++;
+        }
     }
 
-    public void setPokemons_obtenidos(List<Pokemon> pokemons_obtenidos) {
-        this.pokemons_obtenidos = pokemons_obtenidos;
+    public void setPokemons_obtenidos(List<Pokemon> pokemonsObtenidos) {
+        this.pokemonsObtenidos = pokemonsObtenidos;
+    }
+
+    public void setPokemon(int idx, Pokemon pokemon) {
+        pokemonsObtenidos.set(idx, pokemon);
     }
 
     public int getCantidad_pokemons_actual() {
-        return cantidad_pokemons_actual;
+        return cantidadPokemonsActual;
     }
 
-    public void setCantidad_pokemons_actual(int cantidad_pokemons_actual) {
-        this.cantidad_pokemons_actual = cantidad_pokemons_actual;
-    }
-
-    public void setCantidad_pokemons_totales(int cantidad_pokemons_totales) {
-        this.cantidad_pokemons_totales = cantidad_pokemons_totales;
+    public void setCantidad_pokemons_totales(int cantidadPokemonsTotales) {
+        this.cantidadPokemonsTotales = cantidadPokemonsTotales;
     }
 
     private String pokemonsToString() {
         StringBuilder sb = new StringBuilder();
-        for (Pokemon pokemon : pokemons_obtenidos) {
+        for (Pokemon pokemon : pokemonsObtenidos) {
             sb.append(pokemon.toString()).append("\n\t");
         }
         return sb.toString();
@@ -53,6 +55,6 @@ public class Pokedex {
 
     @Override
     public String toString() {
-        return String.format("POKEDEX:\n\tCantidad Actual: %d\n\tCapacidad Total: %d\n\tPokemons Obtenidos:\n\t%s", cantidad_pokemons_actual, cantidad_pokemons_totales, pokemonsToString());
+        return String.format("POKEDEX:\n\tCantidad Actual: %d\n\tCapacidad Total: %d\n\tPokemons Obtenidos:\n\t%s", cantidadPokemonsActual, cantidadPokemonsTotales, pokemonsToString());
     }
 }

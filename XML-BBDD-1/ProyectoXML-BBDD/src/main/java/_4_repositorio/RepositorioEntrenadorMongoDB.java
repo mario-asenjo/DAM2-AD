@@ -15,10 +15,29 @@ import java.util.Properties;
 
 public class RepositorioEntrenadorMongoDB implements RepositorioEntrenador {
 
+    private final MongoClient mongoClient;
     private final MongoCollection<Document> collection;
 
-    public RepositorioEntrenadorMongoDB(MongoCollection<Document> collection) {
-        this.collection = collection;
+    public RepositorioEntrenadorMongoDB() throws Exception {
+        MongoClient mongoClient;
+        MongoDatabase database;
+        MongoCollection<Document> collection;
+        String mongoUri;
+        String dbName;
+        try {
+            Properties props = new Properties();
+            props.load(getClass().getClassLoader().getResourceAsStream("application.properties"));
+
+            mongoUri = props.getProperty("db.mongo.uri", "mongodb://localhost:27017");
+            dbName = props.getProperty("db.mongo.name", "cine");
+
+            mongoClient = MongoClients.create(mongoUri);
+            database = mongoClient.getDatabase(dbName);
+        } catch (IOException e) {
+            throw new Exception("Error configurando MongoDB.");
+        }
+        this.mongoClient = mongoClient;
+        this.collection = database.getCollection("entrenadores");
     }
 
     @Override
@@ -67,6 +86,11 @@ public class RepositorioEntrenadorMongoDB implements RepositorioEntrenador {
 
     @Override
     public Entrenador buscarPorId(long id) {
+        return null;
+    }
+
+    @Override
+    public Entrenador buscarPorNombre(String nombre) throws Exception {
         return null;
     }
 

@@ -1,7 +1,6 @@
 package _4_repositorio;
 
-// Importación de la clase Gson, utilizada para convertir objetos Java en JSON y viceversa.
-// REFERENCIA: https://github.com/google/gson
+import _1_vista.Escaner;
 import com.google.gson.Gson;
 
 // Importamos GsonBuilder, que permite configurar el comportamiento de Gson (como formato legible).
@@ -27,118 +26,136 @@ import java.util.List;
 
 public class RepositorioEntrenadorJSON implements RepositorioEntrenador {
 
-    // Ruta del archivo de entrada JSON en disco.
     private final String ficheroEntrada;
-    // Ruta del archivo de salida JSON en disco.
     private final String ficheroSalida;
 
-    // Instancia de Gson utilizada para serializar/deserializar.
-    // Serializar significa convertir un objeto en memoria (Java, Python, etc.) en un formato que pueda ser almacenado o transmitido.
-    // Deserializar es el proceso inverso: convertir datos almacenados o recibidos en memoria en un objeto usable por el programa.
     private final Gson gson;
 
-    // Tipo genérico que representa "List<Pelicula>" para poder deserializarlo correctamente.
-    private final Type tipoListaPeliculas;
+    private final Type tipoListaEntrenadores;
 
-    // Constructor: recibe el nombre del fichero y lo crea si no existe.
     public RepositorioEntrenadorJSON(String ficheroEntrada, String ficheroSalida) {
         this.ficheroEntrada = ficheroEntrada;
         this.ficheroSalida = ficheroSalida;
 
-        // Configuración de Gson para que el archivo JSON sea legible (con saltos de línea y sangría).
-        // new Gson() funcionaría, pero produciría salida sin formato.
-        // Es interesante valorar esta función para archivos XML
         this.gson = new GsonBuilder().setPrettyPrinting().create();
-
-        // TypeToken captura el tipo real de List<Pelicula> evitando el borrado de tipos genéricos.
-        this.tipoListaPeliculas = new TypeToken<List<Entrenador>>(){}.getType();
+        this.tipoListaEntrenadores = new TypeToken<List<Entrenador>>(){}.getType();
     }
 
-    // Guarda una nueva película en el archivo JSON.
+    @Override
     public void guardar(Entrenador entrenador) throws Exception {
-        // Si el archivo JSON no existe, se crea uno vacío con una lista de películas vacía.
         File f = new File(ficheroSalida);
         List<Entrenador> lista;
+
         if (!f.exists()) {
             lista = new ArrayList<>();
         } else {
-            // Primero recuperamos la lista actual del archivo.
             lista = listar();
         }
-
-        // Agregamos la nueva película a la lista.
         lista.add(entrenador);
-
-        // Guardamos la lista completa en el archivo.
         guardarLista(lista);
     }
 
-    // Devuelve todas las películas almacenadas en el archivo JSON.
+    @Override
     public List<Entrenador> listar() throws Exception {
-        Reader reader;
-        List<Entrenador> lista;
+        File fSalida = new File(ficheroSalida);
+        File fEntrada = new File(ficheroEntrada);
+        Reader reader = null;
+        List<Entrenador> lista = null;
 
         try {
-            reader = new FileReader(ficheroEntrada);
-            // Deserializa el contenido del archivo a List<Pelicula>.
-            lista = gson.fromJson(reader, tipoListaPeliculas);
-
-            if (lista == null) {
-                throw new Exception("La lista de lectura es nula.");
+            if (fSalida.exists()) {
+                reader = new FileReader(fSalida);
+            } else {
+              if (fEntrada.exists()) {
+                  reader = new FileReader(fEntrada);
+              } else {
+                  return new ArrayList<Entrenador>();
+              }
             }
+            lista = gson.fromJson(reader, tipoListaEntrenadores);
+            if (lista == null) {
+                lista = new ArrayList<Entrenador>();
+            }
+            reader.close();
             return lista;
         } catch (IOException e) {
+            if (reader != null) {
+                try {
+                    reader.close();
+            } catch (IOException _) { } // Truco ignorar excepción, nunca se va a dar. Hay que añadirla por el compilador.
+            }
             throw new Exception("Excepción durante la lectura del JSON.");
         }
     }
 
-    // Busca un entrenador por Id.
+    @Override
     public Entrenador buscarPorId(long id) throws Exception {
         List<Entrenador> lista = listar();
-        for (Entrenador entrenador : lista) {
-            if (entrenador.getId() == id) {
-                return entrenador;
+        boolean encontrado = false;
+        Entrenador found = null;
+        for (int i = 0; i < lista.size() && !encontrado; i++) {
+            if (lista.get(i).getId() == id) {
+                found = lista.get(i);
+                encontrado = true;
             }
         }
-        throw new Exception("No se ha encontrado el entrenador con id " + id);
+        return found;
     }
 
-    // Actualiza una película existente, buscándola por su ID.
-    public void actualizar(Entrenador entrenador) throws Exception {
-        // Cogemos la lista para modificar.
+    @Override
+    public Entrenador buscarPorNombre(String nombre) throws Exception {
         List<Entrenador> lista = listar();
+        boolean encontrado = false;
+        Entrenador found = null;
 
-        // Modificamos buscando por id.
-        lista.set(lista.indexOf(buscarPorId(entrenador.getId())), entrenador);
+        for (int i = 0; i < lista.size() && !encontrado; i++) {
+            if (lista.get(i).getNombre().equalsIgnoreCase(nombre)) {
+                found = lista.get(i);
+                encontrado = true;
+            }
+        }
+        return found;
+    }
 
-        // Guardamos la lista completa nuevamente.
+    @Override
+    public void actualizar(Entrenador entrenador) throws Exception {
+        List<Entrenador> lista = listar();
+        boolean encontrado = false;
+
+        for (int i = 0; i < lista.size() && !encontrado; i++) {
+            if (lista.get(i).getId() == entrenador.getId()) {
+                lista.set(i, entrenador);
+                encontrado = true;
+            }
+        }
+        if (!encontrado) {
+            throw new Exception("No se ha encontrado el entrenador para actualizar.");
+        }
         guardarLista(lista);
     }
 
-    // Elimina una película del archivo JSON según su ID.
+    @Override
     public void borrarPorId(long id) throws Exception {
         List<Entrenador> lista = listar();
 
-        // Muy útil!! removeIf elimina elementos que cumplan la condición del predicado.
         lista.removeIf(p -> p.getId() == id);
-
         guardarLista(lista);
     }
 
-    // Método privado que sobrescribe el archivo JSON con la lista proporcionada.
     private void guardarLista(List<Entrenador> lista) throws Exception {
-        Writer writer;
+        Writer writer = null;
 
         try {
             writer = new FileWriter(ficheroSalida);
-
-            // Serializa la lista a JSON y lo escribe en el archivo.
             gson.toJson(lista, writer);
-
-            // Lo que falte en el buffer lo limpiamos y después cerramos el escritor.
             writer.flush();
             writer.close();
         } catch (IOException e) {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException _) { }
+            }
             throw new Exception("Excepción durante la escritura del JSON.");
         }
     }

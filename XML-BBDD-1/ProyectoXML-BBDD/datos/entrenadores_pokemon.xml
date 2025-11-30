@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<entrenadores>
+    <entrenador id="1">
+        <nombre>Manolo</nombre>
+        <pueblo>Paleta</pueblo>
+        <edad>Paleta</edad>
+        <pokemons>
+            <pokemon id="1">
+                <nombre>Pikachuca</nombre>
+                <especie>Chupamingas</especie>
+                <tipo>RayoGAY</tipo>
+                <nivel>20</nivel>
+            </pokemon>
+        </pokemons>
+    </entrenador>
+</entrenadores>

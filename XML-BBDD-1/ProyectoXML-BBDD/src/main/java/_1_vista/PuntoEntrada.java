@@ -3,13 +3,8 @@ package _1_vista;
 import _2_controlador.*;
 import _4_repositorio.*;
 import _5_servicio.ServicioEntrenadorImpl;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.bson.Document;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -28,8 +23,8 @@ public class PuntoEntrada {
 
         props.load(getClass().getClassLoader().getResourceAsStream("application.properties"));
         dbUrl = props.getProperty("db.url", "jdbc:mysql://localhost:3306/entrenadores_pokemon_hikari?useSSL=false&serverTimezone=UTC");
-        dbName = props.getProperty("db.user", "jdbcuser");
-        dbPass = props.getProperty("db.pass", "12345");
+        dbName = props.getProperty("db.user", "jdbcentrenadores");
+        dbPass = props.getProperty("db.pass", "entrenadoresmaestro");
 
         cfg.setJdbcUrl(dbUrl);
         cfg.setUsername(dbName);
@@ -39,28 +34,6 @@ public class PuntoEntrada {
         cfg.setConnectionTimeout(10_000);
 
         return new HikariDataSource(cfg);
-    }
-
-    private MongoCollection<Document> createDataSourceForMongo() throws IOException {
-        MongoClient mongoClient;
-        MongoDatabase database;
-        MongoCollection<Document> collection;
-        String mongoUri;
-        String dbName;
-        Properties props = new Properties();
-        props.load(getClass().getClassLoader().getResourceAsStream("application.properties"));
-
-        mongoUri = props.getProperty("db.mongo.uri", "mongodb://localhost:27017");
-        dbName = props.getProperty("db.mongo.name", "cine");
-
-        mongoClient = MongoClients.create(mongoUri);
-        database = mongoClient.getDatabase(dbName);
-
-        collection = database.getCollection("peliculas");
-
-        mongoClient.close();
-
-        return collection;
     }
 
     public PuntoEntrada() {
@@ -73,17 +46,15 @@ public class PuntoEntrada {
         Consola.mostrarFraseEndl("Elige el repositorio a utilizar:", Colores.VERDE);
         Consola.mostrarMenu(List.of("Repo XML.", "Repo MySQL.", "Repo JSON.", "Repo MongoDB."));
         opcionRepo = Escaner.pedirEntero("Introduce tu opcion: ");
-        ficheroEntrada = Escaner.pedirString("Introduce el nombre del fichero de entrada: ");
-        ficheroSalida = Escaner.pedirString("Introduce el nombre del fichero de salida: ");
         try {
             switch (opcionRepo) {
-                case 1 -> repo = new RepositorioEntrenadorXML(ficheroEntrada, ficheroSalida);
+                case 1 -> repo = new RepositorioEntrenadorXML("datos/entrenadores_pokemon.xml");
                 case 2 -> repo = new RepositorioEntrenadorMySQL(createDataSourceForMySQL());
-                case 3 -> repo = new RepositorioEntrenadorJSON(ficheroEntrada, ficheroSalida);
-                case 4 -> repo = new RepositorioEntrenadorMongoDB(createDataSourceForMongo());
+                case 3 -> repo = new RepositorioEntrenadorJSON("datos/entrenadores_pokemon.json","datos/entrenadores_pokemon.json");
+                case 4 -> repo = new RepositorioEntrenadorMongoDB();
                 default -> Consola.mostrarFraseEndl("Error, repositorio no valido.", Colores.ROJO);
             }
-        } catch (NullPointerException | SecurityException | IOException e) {
+        } catch (Exception e) {
             Consola.mostrarExcepcion(e);
         }
         if (repo != null) {
@@ -105,19 +76,15 @@ public class PuntoEntrada {
 
             Consola.mostrarFraseEndl("##### PROGRAMA DE ENTRENADORES POKEMON #####");
             while (!salir) {
-                try {
-                    Consola.mostrarFraseEndl("OPERACIONES: ");
-                    Consola.mostrarMenu(List.of("Crear entrenador pokemon.", "Buscar un entrenador pokemon.", "Actualizar datos de entrenador pokemon.", "Borrar entrenador pokemon.", "Salir del programa."));
-                    opcion_operacion = Escaner.pedirEntero("Introduce tu opcion: ");
-                    switch (opcion_operacion) {
-                        case 1 -> controlador.crearEntrenador();
-                        case 2 -> controlador.buscarEntrenador();
-                        case 3 -> controlador.actualizarEntrenador();
-                        case 4 -> controlador.borrarEntrenador();
-                        case 5 -> salir = true;
-                    }
-                } catch (Exception e) {
-                    Consola.mostrarExcepcion(e);
+                Consola.mostrarFraseEndl("OPERACIONES: ");
+                Consola.mostrarMenu(List.of("Crear entrenador pokemon.", "Buscar un entrenador pokemon.", "Actualizar datos de entrenador pokemon.", "Borrar entrenador pokemon.", "Salir del programa."));
+                opcion_operacion = Escaner.pedirEntero("Introduce tu opcion: ");
+                switch (opcion_operacion) {
+                    case 1 -> controlador.crearEntrenador();
+                    case 2 -> controlador.buscarEntrenador();
+                    case 3 -> controlador.actualizarEntrenador();
+                    case 4 -> controlador.borrarEntrenador();
+                    case 5 -> salir = true;
                 }
             }
             Consola.mostrarFraseEndl("Saliendo del programa de forma controlada!", Colores.VERDE);

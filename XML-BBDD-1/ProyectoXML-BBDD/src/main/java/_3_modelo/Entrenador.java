@@ -58,6 +58,10 @@ public class Entrenador {
         return this.pokedex;
     }
 
+    public void setPokedex(Pokedex pokedex) {
+        this.pokedex = pokedex;
+    }
+
     @Override
     public String toString() {
         return String.format("ENTRENADOR -> ID: %d, Nombre: %s, Edad: %d, Pueblo: %s {\n\t%s}", id, nombre, edad, pueblo, pokedex.toString());

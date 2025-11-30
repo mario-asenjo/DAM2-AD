@@ -5,16 +5,20 @@
     "pueblo": "HojaSuave",
     "edad": 23,
     "pokedex": {
-      "cantidad_pokemons_totales": 20,
-      "cantidad_pokemons_actual": 0,
-      "pokemons_obtenidos": [
-        {
-          "id": 1,
-          "nombre": "Pikachu",
-          "tipo": "Rayo",
-          "nivel": 22
-        }
-      ]
+      "cantidadPokemonsTotales": 151,
+      "cantidadPokemonsActual": 0,
+      "pokemonsObtenidos": []
+    }
+  },
+  {
+    "id": 2,
+    "nombre": "David",
+    "pueblo": "paleta",
+    "edad": 22,
+    "pokedex": {
+      "cantidadPokemonsTotales": 151,
+      "cantidadPokemonsActual": 0,
+      "pokemonsObtenidos": []
     }
   }
 ]

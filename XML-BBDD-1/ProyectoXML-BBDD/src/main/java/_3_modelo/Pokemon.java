@@ -3,18 +3,28 @@ package _3_modelo;
 public class Pokemon {
     private int id;
     private String nombre;
+    private String especie;
     private String tipo;
     private int nivel;
 
-    public Pokemon(int id, String nombre, String tipo, int nivel) {
+    public Pokemon(int id, String nombre, String especie, String tipo, int nivel) {
         this.id = id;
         this.nombre = nombre;
+        this.especie = especie;
         this.tipo = tipo;
         this.nivel = nivel;
     }
 
     public int getId() {
         return id;
+    }
+
+    public String getEspecie() {
+        return especie;
+    }
+
+    public void setEspecie(String especie) {
+        this.especie = especie;
     }
 
     public String getNombre() {
