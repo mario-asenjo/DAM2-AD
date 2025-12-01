@@ -21,3 +21,37 @@ CREATE VIEW entrenadores_pokemons AS
 SELECT e.id AS E_ID, e.nombre as E_NOMBRE, e.pueblo AS E_PUEBLE, e.edad AS E_EDAD, p.id AS P_ID, p.nombre as P_NOMBRE, p.especie AS P_ESPECIE, p.tipo AS P_TIPO, p.nivel AS P_NIVEL, p.id_entrenador AS P_ID_ENTRENADOR
 FROM entrenadores e INNER JOIN pokemons p
 ON e.id = p.id_entrenador;
+
+////////////////////////////////
+POSTGRES
+
+CREATE TABLE entrenadores (
+    id INT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    pueblo VARCHAR(100),
+    edad INT
+);
+
+CREATE TABLE pokemons (
+    id INT PRIMARY KEY,
+    id_entrenador INT NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    especie VARCHAR(100) NOT NULL,
+    tipo VARCHAR(30) NOT NULL,
+    nivel INT NOT NULL,
+    FOREIGN KEY (id_entrenador) REFERENCES entrenadores(id)
+);
+
+CREATE VIEW entrenadores_pokemons AS
+SELECT e.id AS E_ID,
+       e.nombre AS E_NOMBRE,
+       e.pueblo AS E_PUEBLO,
+       e.edad AS E_EDAD,
+       p.id AS P_ID,
+       p.nombre AS P_NOMBRE,
+       p.especie AS P_ESPECIE,
+       p.tipo AS P_TIPO,
+       p.nivel AS P_NIVEL,
+       p.id_entrenador AS P_ID_ENTRENADOR
+FROM entrenadores e
+JOIN pokemons p ON e.id = p.id_entrenador;

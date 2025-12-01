@@ -1,12 +1,14 @@
 package _4_repositorio.conn_utils;
 
+import _6_excepciones.EntidadNoEncontradaException;
+
 import javax.sql.DataSource;
 import java.sql.*;
 
-public class MySQLUtils {
+public class SQLUtils {
     private final DataSource dataSource;
 
-    public MySQLUtils(DataSource dataSource){
+    public SQLUtils(DataSource dataSource){
         this.dataSource = dataSource;
     }
 
@@ -117,7 +119,7 @@ public class MySQLUtils {
 
     @FunctionalInterface
     public interface Mapper<T> {
-        T miMetodoMapper(ResultSet resultSet) throws SQLException;
+        T miMetodoMapper(ResultSet resultSet) throws SQLException, EntidadNoEncontradaException;
     }
 
     @FunctionalInterface

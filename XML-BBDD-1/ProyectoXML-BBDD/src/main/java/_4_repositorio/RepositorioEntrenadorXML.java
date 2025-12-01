@@ -1,22 +1,28 @@
 package _4_repositorio;
 
-import _1_vista.Escaner;
 import _3_modelo.Entrenador;
 import _3_modelo.Pokedex;
 import _3_modelo.Pokemon;
-import com.mongodb.internal.operation.TransactionOperation;
+import _6_excepciones.EntidadNoEncontradaException;
+import _6_excepciones.RepositorioException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +30,7 @@ public class RepositorioEntrenadorXML implements RepositorioEntrenador {
     private final String ficheroEntrada;
     private final File fichero;
 
-    public RepositorioEntrenadorXML(String ficheroEntrada) throws Exception {
+    public RepositorioEntrenadorXML(String ficheroEntrada) throws RepositorioException {
         this.ficheroEntrada = ficheroEntrada;
         this.fichero = new File(ficheroEntrada);
         if (!fichero.exists()) {
@@ -33,7 +39,7 @@ public class RepositorioEntrenadorXML implements RepositorioEntrenador {
     }
 
     /*MÉTODOS REFERENTES AL DOCUMENTO COMO TAL*/
-    private void crearDocumento() throws Exception {
+    private void crearDocumento() throws RepositorioException {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -43,21 +49,21 @@ public class RepositorioEntrenadorXML implements RepositorioEntrenador {
             documento.appendChild(raiz);
             guardarDocumento(documento);
         } catch (ParserConfigurationException e) {
-            throw new Exception(e);
+            throw new RepositorioException("Error durante la creación del documento XML.", e);
         }
     }
 
-    private Document cargarDocumento(File fichero) throws Exception {
+    private Document cargarDocumento(File fichero) throws RepositorioException {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             return builder.parse(fichero);
-        } catch (Exception e) {
-            throw new Exception("Error cargando documento XML.");
+        } catch (FactoryConfigurationError | ParserConfigurationException | IOException | SAXException | IllegalArgumentException e) {
+            throw new RepositorioException("Error cargando documento XML.", e);
         }
     }
 
-    private void guardarDocumento(Document documento) throws Exception {
+    private void guardarDocumento(Document documento) throws RepositorioException {
         try {
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer transformer = factory.newTransformer();
@@ -69,7 +75,7 @@ public class RepositorioEntrenadorXML implements RepositorioEntrenador {
 
             transformer.transform(new DOMSource(documento), new StreamResult(fichero));
         } catch (TransformerException e) {
-            throw new Exception("Error guardando docuemento con transformer XML.");
+            throw new RepositorioException("Error guardando docuemento con transformer XML.", e);
         }
     }
 
@@ -84,6 +90,29 @@ public class RepositorioEntrenadorXML implements RepositorioEntrenador {
         if (lista.getLength() > 0) {
             lista.item(0).setTextContent(nuevoTexto);
         }
+    }
+
+    private void pokemonToNode(Document documento, Element pokemonsNode, Pokemon pokemon) {
+        Element pokemonNode;
+        Element pNombreNode;
+        Element especieNode;
+        Element tipoNode;
+        Element nivelNode;
+        pokemonNode = documento.createElement("pokemon");
+        pokemonNode.setAttribute("id", String.valueOf(pokemon.getId())); // <pokemon id="1">
+        pNombreNode = documento.createElement("nombre");
+        pNombreNode.appendChild(documento.createTextNode(pokemon.getNombre()));
+        pokemonNode.appendChild(pNombreNode); // anexa <nombre> en <pokemon>
+        especieNode = documento.createElement("especie");
+        especieNode.appendChild(documento.createTextNode(pokemon.getEspecie()));
+        pokemonNode.appendChild(especieNode); // anexa <especie> en <pokemon>
+        tipoNode = documento.createElement("tipo");
+        tipoNode.appendChild(documento.createTextNode(pokemon.getTipo()));
+        pokemonNode.appendChild(tipoNode); // anexa <tipo> en <pokemon>
+        nivelNode = documento.createElement("nivel");
+        nivelNode.appendChild(documento.createTextNode(String.valueOf(pokemon.getNivel())));
+        pokemonNode.appendChild(nivelNode); // anexa <nivel> en <pokemon>
+        pokemonsNode.appendChild(pokemonNode); // anexa todo el <pokemon> creado en <pokemons>
     }
 
     private Pokedex leerPokedexDeElement(Element entrenadorElement) {
@@ -118,7 +147,7 @@ public class RepositorioEntrenadorXML implements RepositorioEntrenador {
 
     /*MÉTODOS DE LA INTERFÁZ*/
     @Override
-    public List<Entrenador> listar() throws Exception {
+    public List<Entrenador> listar() throws RepositorioException {
         List<Entrenador> lista = new ArrayList<Entrenador>();
         File fichero = new File(ficheroEntrada);
         Element elemento = null;
@@ -132,31 +161,27 @@ public class RepositorioEntrenadorXML implements RepositorioEntrenador {
         int edad = -1;
         Entrenador entrenador = null;
 
-        try {
-            documento = cargarDocumento(fichero);
-            entrenadorNodeList = documento.getElementsByTagName("entrenador");
+        documento = cargarDocumento(fichero);
+        entrenadorNodeList = documento.getElementsByTagName("entrenador");
 
-            for (int i = 0; i < entrenadorNodeList.getLength(); i++) {
-                nodo = entrenadorNodeList.item(i);
-                if (nodo.getNodeType() == Node.ELEMENT_NODE) {
-                    elemento = (Element) nodo;
-                    id = Long.parseLong(elemento.getAttribute("id"));
-                    nombre = obtenerTextoHijo(elemento, "nombre");
-                    pueblo = obtenerTextoHijo(elemento, "pueblo");
-                    edad = Integer.parseInt(obtenerTextoHijo(elemento, "edad"));
-                    pokedex = leerPokedexDeElement(elemento);
-                    entrenador = new Entrenador(id, nombre, pueblo, edad, pokedex);
-                    lista.add(entrenador);
-                }
+        for (int i = 0; i < entrenadorNodeList.getLength(); i++) {
+            nodo = entrenadorNodeList.item(i);
+            if (nodo.getNodeType() == Node.ELEMENT_NODE) {
+                elemento = (Element) nodo;
+                id = Long.parseLong(elemento.getAttribute("id"));
+                nombre = obtenerTextoHijo(elemento, "nombre");
+                pueblo = obtenerTextoHijo(elemento, "pueblo");
+                edad = Integer.parseInt(obtenerTextoHijo(elemento, "edad"));
+                pokedex = leerPokedexDeElement(elemento);
+                entrenador = new Entrenador(id, nombre, pueblo, edad, pokedex);
+                lista.add(entrenador);
             }
-            return (lista);
-        } catch (Exception e) {
-            throw new Exception("Error listando documento XML.");
         }
+        return (lista);
     }
 
     @Override
-    public void guardar(Entrenador entrenador) throws Exception {
+    public void guardar(Entrenador entrenador) throws RepositorioException {
         Document documento = null;
         Element raiz = null;
         Element entrenadorNode = null;
@@ -165,56 +190,36 @@ public class RepositorioEntrenadorXML implements RepositorioEntrenador {
         Element edadNode = null;
         Element pokemonsNode = null;
         List<Pokemon> listaPokemons = entrenador.getPokedex().getPokemons_obtenidos();
-        Pokemon pokemon = null;
         Element pokemonNode = null;
         Element pNombreNode = null;
         Element especieNode = null;
         Element tipoNode = null;
         Element nivelNode = null;
 
-        try {
-            documento = cargarDocumento(fichero);
-            raiz = documento.getDocumentElement(); // <entrenadores>
-            entrenadorNode = documento.createElement("entrenador");
-            entrenadorNode.setAttribute("id", String.valueOf(entrenador.getId())); // <entrenador id="1">
-            nombreNode = documento.createElement("nombre");
-            nombreNode.appendChild(documento.createTextNode(entrenador.getNombre()));
-            entrenadorNode.appendChild(nombreNode); // anexa <nombre> en <entrenador>
-            puebloNode = documento.createElement("pueblo");
-            puebloNode.appendChild(documento.createTextNode(entrenador.getPueblo()));
-            entrenadorNode.appendChild(puebloNode); // anexa <pueblo> en <entrenador>
-            edadNode = documento.createElement("edad");
-            edadNode.appendChild(documento.createTextNode(entrenador.getPueblo()));
-            entrenadorNode.appendChild(edadNode); // anexa <edad> en <entrenador>
-            pokemonsNode = documento.createElement("pokemons"); // <pokemons>
-            for (int i = 0; i < listaPokemons.size(); i++) {
-                pokemon = listaPokemons.get(i);
-                pokemonNode = documento.createElement("pokemon");
-                pokemonNode.setAttribute("id", String.valueOf(pokemon.getId())); // <pokemon id="1">
-                pNombreNode = documento.createElement("nombre");
-                pNombreNode.appendChild(documento.createTextNode(pokemon.getNombre()));
-                pokemonNode.appendChild(pNombreNode); // anexa <nombre> en <pokemon>
-                especieNode = documento.createElement("especie");
-                especieNode.appendChild(documento.createTextNode(pokemon.getEspecie()));
-                pokemonNode.appendChild(especieNode); // anexa <especie> en <pokemon>
-                tipoNode = documento.createElement("tipo");
-                tipoNode.appendChild(documento.createTextNode(pokemon.getTipo()));
-                pokemonNode.appendChild(tipoNode); // anexa <tipo> en <pokemon>
-                nivelNode = documento.createElement("nivel");
-                nivelNode.appendChild(documento.createTextNode(String.valueOf(pokemon.getNivel())));
-                pokemonNode.appendChild(nivelNode); // anexa <nivel> en <pokemon>
-                pokemonsNode.appendChild(pokemonNode); // anexa todo el <pokemon> creado en <pokemons>
-            }
-            entrenadorNode.appendChild(pokemonsNode); // anexa todos los <pokemons> en <entrenador>
-            raiz.appendChild(entrenadorNode); // anexamos el <entrenador> a <entrenadores>
-            guardarDocumento(documento);
-        } catch (Exception e) {
-            throw new Exception("Error guardando un entrenador en XML.");
+        documento = cargarDocumento(fichero);
+        raiz = documento.getDocumentElement(); // <entrenadores>
+        entrenadorNode = documento.createElement("entrenador");
+        entrenadorNode.setAttribute("id", String.valueOf(entrenador.getId())); // <entrenador id="1">
+        nombreNode = documento.createElement("nombre");
+        nombreNode.appendChild(documento.createTextNode(entrenador.getNombre()));
+        entrenadorNode.appendChild(nombreNode); // anexa <nombre> en <entrenador>
+        puebloNode = documento.createElement("pueblo");
+        puebloNode.appendChild(documento.createTextNode(entrenador.getPueblo()));
+        entrenadorNode.appendChild(puebloNode); // anexa <pueblo> en <entrenador>
+        edadNode = documento.createElement("edad");
+        edadNode.appendChild(documento.createTextNode(String.valueOf(entrenador.getEdad())));
+        entrenadorNode.appendChild(edadNode); // anexa <edad> en <entrenador>
+        pokemonsNode = documento.createElement("pokemons"); // <pokemons>
+        for (Pokemon pokemon : listaPokemons) {
+            pokemonToNode(documento, pokemonsNode, pokemon);
         }
+        entrenadorNode.appendChild(pokemonsNode); // anexa todos los <pokemons> en <entrenador>
+        raiz.appendChild(entrenadorNode); // anexamos el <entrenador> a <entrenadores>
+        guardarDocumento(documento);
     }
 
     @Override
-    public Entrenador buscarPorId(long id) throws Exception {
+    public Entrenador buscarPorId(long id) throws RepositorioException, EntidadNoEncontradaException {
         List<Entrenador> lista = listar();
         Entrenador entrenador = null;
         boolean encontrado = false;
@@ -225,11 +230,14 @@ public class RepositorioEntrenadorXML implements RepositorioEntrenador {
                 encontrado = true;
             }
         }
+        if (!encontrado) {
+            throw new EntidadNoEncontradaException("No se ha encontrado entrenador con ese ID");
+        }
         return entrenador;
     }
 
     @Override
-    public Entrenador buscarPorNombre(String nombre) throws Exception {
+    public Entrenador buscarPorNombre(String nombre) throws RepositorioException, EntidadNoEncontradaException {
         List<Entrenador> lista = listar();
         Entrenador entrenador = null;
         boolean encontrado = false;
@@ -240,80 +248,60 @@ public class RepositorioEntrenadorXML implements RepositorioEntrenador {
                 encontrado = true;
             }
         }
+        if (!encontrado) {
+            throw new EntidadNoEncontradaException("No se encuentra entrenador con ese nombre.");
+        }
         return entrenador;
     }
 
     @Override
-    public void actualizar(Entrenador entrenador) throws Exception {
+    public void actualizar(Entrenador entrenador) throws RepositorioException, EntidadNoEncontradaException {
         Document documento = null;
         NodeList entrenadoresNode = null;
         Node nodo = null;
         Element elemento = null;
         long idActual = -1;
         NodeList listaPokemonsNode = null;
-        Element pokemonNode = null;
         Element nuevoPokemonsNode = null;
         List<Pokemon> listaPokemons = entrenador.getPokedex().getPokemons_obtenidos();
         Pokemon pokemon = null;
-        Element nombreNode = null;
-        Element especieNode = null;
-        Element tipoNode = null;
-        Element nivelNode = null;
         boolean actualizado = false;
 
-        try {
-            documento = cargarDocumento(fichero);
-            entrenadoresNode = documento.getElementsByTagName("entrenador");
+        documento = cargarDocumento(fichero);
+        entrenadoresNode = documento.getElementsByTagName("entrenador");
 
-            for (int i = 0; i < entrenadoresNode.getLength() && !actualizado; i++) {
-                nodo = entrenadoresNode.item(i);
-                if (nodo.getNodeType() == Node.ELEMENT_NODE) {
-                    elemento = (Element) nodo;
-                    idActual = Long.parseLong(elemento.getAttribute("id"));
-                    if (idActual == entrenador.getId()) {
-                        cambiarTextoHijo(elemento, "nombre", entrenador.getNombre()); // cambia de este elemento la etiqueta <nombre>
-                        cambiarTextoHijo(elemento, "pueblo", entrenador.getPueblo()); // cambia de este elemento la etiqueta <pueblo>
-                        cambiarTextoHijo(elemento, "edad", String.valueOf(entrenador.getEdad())); // cambia de este elemento la etiqueta <edad>
-                        listaPokemonsNode = elemento.getElementsByTagName("pokemons");
-                        elemento.removeChild(listaPokemonsNode.item(0)); // elimina el nodo <pokemons>
-                        nuevoPokemonsNode = documento.createElement("pokemons"); // crea de nuevo el nodo <pokemons>
-                        listaPokemons = entrenador.getPokedex().getPokemons_obtenidos();
-                        if (entrenador.getPokedex() != null && listaPokemons != null) {
-                            for (int j = 0; j < listaPokemons.size(); j++) {
-                                pokemon = listaPokemons.get(j);
-                                pokemonNode = documento.createElement("pokemon"); // crea un nodo <pokemon>
-                                pokemonNode.setAttribute("id", String.valueOf(pokemon.getId()));
-                                nombreNode = documento.createElement("nombre");
-                                nombreNode.appendChild(documento.createTextNode(pokemon.getNombre()));
-                                pokemonNode.appendChild(nombreNode); // anexa el elemento <nombre> al <pokemon>
-                                especieNode = documento.createElement("especie");
-                                especieNode.appendChild(documento.createTextNode(pokemon.getEspecie()));
-                                pokemonNode.appendChild(especieNode); // anexa el elemento <especie> al <pokemon>
-                                tipoNode = documento.createElement("tipo");
-                                tipoNode.appendChild(documento.createTextNode(pokemon.getTipo()));
-                                pokemonNode.appendChild(tipoNode);
-                                nivelNode = documento.createElement("nivel");
-                                nivelNode.appendChild(documento.createTextNode(String.valueOf(pokemon.getNivel())));
-                                pokemonNode.appendChild(nivelNode);
-                                nuevoPokemonsNode.appendChild(pokemonNode);
-                            }
+        for (int i = 0; i < entrenadoresNode.getLength() && !actualizado; i++) {
+            nodo = entrenadoresNode.item(i);
+            if (nodo.getNodeType() == Node.ELEMENT_NODE) {
+                elemento = (Element) nodo;
+                idActual = Long.parseLong(elemento.getAttribute("id"));
+                if (idActual == entrenador.getId()) {
+                    cambiarTextoHijo(elemento, "nombre", entrenador.getNombre()); // cambia de este elemento la etiqueta <nombre>
+                    cambiarTextoHijo(elemento, "pueblo", entrenador.getPueblo()); // cambia de este elemento la etiqueta <pueblo>
+                    cambiarTextoHijo(elemento, "edad", String.valueOf(entrenador.getEdad())); // cambia de este elemento la etiqueta <edad>
+                    listaPokemonsNode = elemento.getElementsByTagName("pokemons");
+                    elemento.removeChild(listaPokemonsNode.item(0)); // elimina el nodo <pokemons>
+                    nuevoPokemonsNode = documento.createElement("pokemons"); // crea de nuevo el nodo <pokemons>
+                    listaPokemons = entrenador.getPokedex().getPokemons_obtenidos();
+                    if (entrenador.getPokedex() != null && listaPokemons != null) {
+                        for (int j = 0; j < listaPokemons.size(); j++) {
+                            pokemon = listaPokemons.get(j);
+                            pokemonToNode(documento, nuevoPokemonsNode, pokemon);
                         }
-                        elemento.appendChild(nuevoPokemonsNode);
-                        actualizado = true;
                     }
+                    elemento.appendChild(nuevoPokemonsNode);
+                    actualizado = true;
                 }
             }
-            if (!actualizado) {
-                throw new Exception("No se ha encontrado el entrenador para actualizar.");
-            }
-            guardarDocumento(documento);
-        } catch (Exception e) {
-            throw new Exception("Error intentando actualizar un entrenador en XML.");
         }
+        if (!actualizado) {
+            throw new EntidadNoEncontradaException("No se ha encontrado el entrenador para actualizar.");
+        }
+        guardarDocumento(documento);
     }
 
     @Override
-    public void borrarPorId(long id) throws Exception {
+    public void borrarPorId(long id) throws RepositorioException, EntidadNoEncontradaException {
         boolean borrado = false;
         Document documento = null;
         NodeList listaEntrenadores = null;
@@ -321,26 +309,22 @@ public class RepositorioEntrenadorXML implements RepositorioEntrenador {
         Element elemento = null;
         long idActual = -1;
 
-        try {
-            documento = cargarDocumento(fichero);
-            listaEntrenadores = documento.getElementsByTagName("entrenador");
-            for (int i = 0; i < listaEntrenadores.getLength() && !borrado; i++) {
-                nodo = listaEntrenadores.item(i);
-                if (nodo.getNodeType() == Node.ELEMENT_NODE) {
-                    elemento = (Element) nodo;
-                    idActual = Long.parseLong(elemento.getAttribute("id"));
-                    if (id == idActual) {
-                        elemento.getParentNode().removeChild(elemento);
-                        borrado = true;
-                    }
+        documento = cargarDocumento(fichero);
+        listaEntrenadores = documento.getElementsByTagName("entrenador");
+        for (int i = 0; i < listaEntrenadores.getLength() && !borrado; i++) {
+            nodo = listaEntrenadores.item(i);
+            if (nodo.getNodeType() == Node.ELEMENT_NODE) {
+                elemento = (Element) nodo;
+                idActual = Long.parseLong(elemento.getAttribute("id"));
+                if (id == idActual) {
+                    elemento.getParentNode().removeChild(elemento);
+                    borrado = true;
                 }
             }
-            if (!borrado) {
-                throw new Exception("No se ha encontrado el usuario para borrar.");
-            }
-            guardarDocumento(documento);
-        } catch (Exception e) {
-            throw new Exception("Error durante el borrado por ID en XML.");
         }
+        if (!borrado) {
+            throw new EntidadNoEncontradaException("No se ha encontrado el usuario para borrar.");
+        }
+        guardarDocumento(documento);
     }
 }

@@ -1,14 +1,15 @@
 package _5_servicio;
 
 import _3_modelo.Entrenador;
+import _6_excepciones.ApplicationException;
 
 import java.util.List;
 
 public interface ServicioEntrenador {
-    void guardarEntrenador(Entrenador entrenador) throws Exception;
-    List<Entrenador> listarEntrenadores() throws Exception;
-    Entrenador buscarEntrenadorPorId(long id) throws Exception;
-    Entrenador buscarEntrenadorPorNombre(String nombre) throws Exception;
-    void actualizarEntrenador(Entrenador entrenador) throws Exception;
-    void borrarPorId(long id) throws Exception;
+    void guardarEntrenador(Entrenador entrenador) throws ApplicationException;
+    List<Entrenador> listarEntrenadores() throws ApplicationException;
+    Entrenador buscarEntrenadorPorId(long id) throws ApplicationException;
+    Entrenador buscarEntrenadorPorNombre(String nombre) throws ApplicationException;
+    void actualizarEntrenador(Entrenador entrenador) throws ApplicationException;
+    void borrarPorId(long id) throws ApplicationException;
 }

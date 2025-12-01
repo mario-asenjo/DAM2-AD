@@ -7,7 +7,11 @@ import _3_modelo.Entrenador;
 import _3_modelo.Pokedex;
 import _3_modelo.Pokemon;
 import _5_servicio.ServicioEntrenador;
-import _5_servicio.ServicioEntrenadorImpl;
+import _6_excepciones.ApplicationException;
+import _6_excepciones.EntidadNoEncontradaException;
+import _6_excepciones.EntradaUsuarioNoValidaException;
+import _6_excepciones.IdDuplicadoException;
+import _6_excepciones.RepositorioException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +35,14 @@ public class ControladorEntrenadorConsola implements ControladorEntrenador {
             pokedex = rutinaInsertarPokemons(entrenador.getId(), false);
             entrenador.setPokedex(pokedex);
             servicioEntrenador.guardarEntrenador(entrenador);
-        } catch (Exception  e) {
+            Consola.mostrarFraseEndl("Entrenador creado correctamente!", Colores.VERDE);
+        } catch (IdDuplicadoException e) {
+            Consola.mostrarExcepcion(e);
+        } catch (RepositorioException e) {
+            Consola.mostrarFraseEndl("Error de repositorio: " + e.getMessage(), Colores.ROJO);
+        } catch (ApplicationException e) {
+            Consola.mostrarFraseEndl("Error en la app: " + e.getMessage(), Colores.ROJO);
+        } catch (Exception e) {
             Consola.mostrarExcepcion(e);
         }
     }
@@ -69,8 +80,10 @@ public class ControladorEntrenadorConsola implements ControladorEntrenador {
                 default:
                     Consola.mostrarFraseEndl("No se permite otra opcion que no sea 1 o 2.");
             }
-        } catch (Exception e) {
-            Consola.mostrarExcepcion(e);
+        } catch (EntradaUsuarioNoValidaException e) {
+            Consola.mostrarFraseEndl("Error introduciendo datos: " + e.getMessage(), Colores.ROJO);
+        } catch (ApplicationException e) {
+            Consola.mostrarFraseEndl("Error buscando entrenador: " + e.getMessage(), Colores.ROJO);
         }
     }
 
@@ -85,8 +98,10 @@ public class ControladorEntrenadorConsola implements ControladorEntrenador {
             pokedex = rutinaInsertarPokemons(entrenador.getId(), true);
             entrenador.setPokedex(pokedex);
             servicioEntrenador.actualizarEntrenador(entrenador);
-        } catch (Exception  e) {
-            Consola.mostrarExcepcion(e);
+        } catch (EntradaUsuarioNoValidaException e) {
+            Consola.mostrarFraseEndl("Error introduciendo datos: " + e.getMessage(), Colores.ROJO);
+        } catch (ApplicationException e) {
+            Consola.mostrarFraseEndl("Error buscando entrenador: " + e.getMessage(), Colores.ROJO);
         }
     }
 
@@ -95,38 +110,38 @@ public class ControladorEntrenadorConsola implements ControladorEntrenador {
         int id;
 
         Consola.mostrarFraseEndl("##### MENÚ BORRADO ENTRENADOR POKEMON ##### ");
-        id = Escaner.pedirEntero("Introduce un ID: ");
         try {
+            id = Escaner.pedirEntero("Introduce un ID: ");
             servicioEntrenador.borrarPorId(id);
-        } catch (Exception e) {
-            Consola.mostrarExcepcion(e);
+        } catch (EntradaUsuarioNoValidaException e) {
+            Consola.mostrarFraseEndl("Error introduciendo datos: " + e.getMessage(), Colores.ROJO);
+        } catch (ApplicationException e) {
+            Consola.mostrarFraseEndl("Error buscando entrenador: " + e.getMessage(), Colores.ROJO);
         }
     }
 
-    private Entrenador nuevoEntrenador(boolean actualizar) throws Exception {
-        int id;
-        String nombre;
-        String pueblo;
-        int edad;
+    private Entrenador nuevoEntrenador(boolean actualizar) throws ApplicationException {
+        int id = -1;
+        String nombre = null;
+        String pueblo = null;
+        int edad = -1;
 
-        id = Escaner.pedirEntero("Introduce un ID: ");
-        if (actualizar) {
-            if (servicioEntrenador.buscarEntrenadorPorId(id) == null) {
-                throw new Exception("No existe entrenador con este ID.");
+            id = Escaner.pedirEntero("Introduce un ID: ");
+            if (actualizar) {
+                servicioEntrenador.buscarEntrenadorPorId(id);
             }
-        }
-        nombre = Escaner.pedirString("Introduce un nombre: ");
-        pueblo = Escaner.pedirString("Introduce un pueblo: ");
-        edad = Escaner.pedirEntero("Introduce una edad: ");
-        return new Entrenador(id, nombre, pueblo,  edad);
+            nombre = Escaner.pedirString("Introduce un nombre: ");
+            pueblo = Escaner.pedirString("Introduce un pueblo: ");
+            edad = Escaner.pedirEntero("Introduce una edad: ");
+        return new Entrenador(id, nombre, pueblo, edad);
     }
 
-    private Pokemon nuevoPokemon() {
-        int id;
-        String nombre;
-        String especie;
-        String tipo;
-        int nivel;
+    private Pokemon nuevoPokemon() throws ApplicationException {
+        int id = -1;
+        String nombre = null;
+        String especie = null;
+        String tipo = null;
+        int nivel = -1;
 
         id = Escaner.pedirEntero("Introduce le ID del pokemon: ");
         nombre = Escaner.pedirString("Introduce el nombre del pokemon: ");
@@ -136,9 +151,9 @@ public class ControladorEntrenadorConsola implements ControladorEntrenador {
         return new Pokemon(id, nombre, especie, tipo, nivel);
     }
 
-    private Pokedex rutinaInsertarPokemons(long idEntrenador, boolean actualizar) throws Exception {
+    private Pokedex rutinaInsertarPokemons(long idEntrenador, boolean actualizar) throws ApplicationException {
         boolean quiereIntroducirPokemon;
-        Pokedex pokedex;
+        Pokedex pokedex = new Pokedex(151, new ArrayList<Pokemon>());
         String frase;
         boolean pokedexAntigua = false;
         Pokemon pokemon;
@@ -146,7 +161,7 @@ public class ControladorEntrenadorConsola implements ControladorEntrenador {
         if (actualizar) {
             pokedexAntigua = Escaner.pedirBoolean("¿Quieres usar la pokedex antigua de este entrenador?");
         }
-        pokedex = pokedexAntigua ? servicioEntrenador.buscarEntrenadorPorId(idEntrenador).getPokedex() : new Pokedex(151, new ArrayList<Pokemon>());
+        pokedex = pokedexAntigua ? servicioEntrenador.buscarEntrenadorPorId(idEntrenador).getPokedex() : pokedex;
         if (pokedexAntigua) {
             Consola.mostrarFraseEndl(pokedex.toString());
             frase = "¿Quieres actualizar pokemon de esta pokedex?";

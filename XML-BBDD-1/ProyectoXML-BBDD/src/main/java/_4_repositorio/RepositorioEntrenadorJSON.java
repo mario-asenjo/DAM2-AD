@@ -1,15 +1,9 @@
 package _4_repositorio;
 
-import _1_vista.Escaner;
+import _6_excepciones.EntidadNoEncontradaException;
+import _6_excepciones.RepositorioException;
 import com.google.gson.Gson;
-
-// Importamos GsonBuilder, que permite configurar el comportamiento de Gson (como formato legible).
 import com.google.gson.GsonBuilder;
-
-// TypeToken permite capturar tipos genéricos en tiempo de ejecución (necesario para listas).
-// Java solo “sabe” que es una List, no que contiene Pelicula.
-// Esto provoca problemas cuando Gson intenta deserializar JSON
-// REFERENCIA: https://www.javadoc.io/doc/com.google.code.gson/gson/2.6.2/com/google/gson/reflect/TypeToken.html
 import com.google.gson.reflect.TypeToken;
 
 import _3_modelo.Entrenador;
@@ -20,7 +14,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
+
 import java.lang.reflect.Type; // Permite manipular tipos genéricos.
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +38,7 @@ public class RepositorioEntrenadorJSON implements RepositorioEntrenador {
     }
 
     @Override
-    public void guardar(Entrenador entrenador) throws Exception {
+    public void guardar(Entrenador entrenador) throws RepositorioException {
         File f = new File(ficheroSalida);
         List<Entrenador> lista;
 
@@ -56,7 +52,7 @@ public class RepositorioEntrenadorJSON implements RepositorioEntrenador {
     }
 
     @Override
-    public List<Entrenador> listar() throws Exception {
+    public List<Entrenador> listar() throws RepositorioException {
         File fSalida = new File(ficheroSalida);
         File fEntrada = new File(ficheroEntrada);
         Reader reader = null;
@@ -84,12 +80,12 @@ public class RepositorioEntrenadorJSON implements RepositorioEntrenador {
                     reader.close();
             } catch (IOException _) { } // Truco ignorar excepción, nunca se va a dar. Hay que añadirla por el compilador.
             }
-            throw new Exception("Excepción durante la lectura del JSON.");
+            throw new RepositorioException("Excepción durante la lectura del JSON.");
         }
     }
 
     @Override
-    public Entrenador buscarPorId(long id) throws Exception {
+    public Entrenador buscarPorId(long id) throws RepositorioException, EntidadNoEncontradaException {
         List<Entrenador> lista = listar();
         boolean encontrado = false;
         Entrenador found = null;
@@ -99,11 +95,14 @@ public class RepositorioEntrenadorJSON implements RepositorioEntrenador {
                 encontrado = true;
             }
         }
+        if (!encontrado) {
+            throw new EntidadNoEncontradaException("No se ha encontrado entrenador con este ID.");
+        }
         return found;
     }
 
     @Override
-    public Entrenador buscarPorNombre(String nombre) throws Exception {
+    public Entrenador buscarPorNombre(String nombre) throws RepositorioException, EntidadNoEncontradaException {
         List<Entrenador> lista = listar();
         boolean encontrado = false;
         Entrenador found = null;
@@ -114,11 +113,14 @@ public class RepositorioEntrenadorJSON implements RepositorioEntrenador {
                 encontrado = true;
             }
         }
+        if (!encontrado) {
+            throw new EntidadNoEncontradaException("No se ha encontrado entrenador con este nombre.");
+        }
         return found;
     }
 
     @Override
-    public void actualizar(Entrenador entrenador) throws Exception {
+    public void actualizar(Entrenador entrenador) throws RepositorioException, EntidadNoEncontradaException {
         List<Entrenador> lista = listar();
         boolean encontrado = false;
 
@@ -129,20 +131,20 @@ public class RepositorioEntrenadorJSON implements RepositorioEntrenador {
             }
         }
         if (!encontrado) {
-            throw new Exception("No se ha encontrado el entrenador para actualizar.");
+            throw new EntidadNoEncontradaException("No se ha encontrado el entrenador para actualizar.");
         }
         guardarLista(lista);
     }
 
     @Override
-    public void borrarPorId(long id) throws Exception {
+    public void borrarPorId(long id) throws RepositorioException {
         List<Entrenador> lista = listar();
 
         lista.removeIf(p -> p.getId() == id);
         guardarLista(lista);
     }
 
-    private void guardarLista(List<Entrenador> lista) throws Exception {
+    private void guardarLista(List<Entrenador> lista) throws RepositorioException {
         Writer writer = null;
 
         try {
@@ -156,7 +158,7 @@ public class RepositorioEntrenadorJSON implements RepositorioEntrenador {
                     writer.close();
                 } catch (IOException _) { }
             }
-            throw new Exception("Excepción durante la escritura del JSON.");
+            throw new RepositorioException("Excepción durante la escritura del JSON.");
         }
     }
 }

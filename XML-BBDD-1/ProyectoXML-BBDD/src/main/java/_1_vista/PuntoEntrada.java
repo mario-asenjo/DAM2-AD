@@ -1,33 +1,53 @@
 package _1_vista;
 
-import _2_controlador.*;
-import _4_repositorio.*;
+import _2_controlador.ControladorEntrenador;
+import _2_controlador.ControladorEntrenadorConsola;
+import _4_repositorio.RepositorioEntrenador;
+import _4_repositorio.RepositorioEntrenadorMySQL;
+import _4_repositorio.RepositorioEntrenadorJSON;
+import _4_repositorio.RepositorioEntrenadorXML;
+import _4_repositorio.RepositorioEntrenadorPostgres;
+import _4_repositorio.RepositorioEntrenadorMongoDB;
 import _5_servicio.ServicioEntrenadorImpl;
+
+import _6_excepciones.EntidadNoEncontradaException;
+import _6_excepciones.EntradaUsuarioNoValidaException;
+import _6_excepciones.RepositorioException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-
 import javax.sql.DataSource;
+
 import java.io.IOException;
+
 import java.util.List;
 import java.util.Properties;
 
 public class PuntoEntrada {
-    private final ControladorEntrenadorConsola controlador;
+    private final ControladorEntrenador controlador;
 
-    private DataSource createDataSourceForMySQL() throws IOException {
+    private DataSource createDataSourceForSQL(boolean postgres) throws IOException {
         String dbUrl;
-        String dbName;
+        String dbUser;
         String dbPass;
+        String urlKey = postgres ? "db.pg.url" : "db.url";
+        String urlVal = postgres
+                ? "jdbc:postgresql://localhost:5432/entrenadores_pokemon"
+                : "jdbc:mysql://localhost:3306/entrenadores_pokemon_hikari?useSSL=false&serverTimezone=UTC";
+        String userKey = postgres ? "db.pg.user" : "db.user";
+        String userVal = postgres ? "postgresuser" : "jdbcentrenadores";
+        String passKey = postgres ? "db.pg.pass" : "db.pass";
+        String passVal = postgres ? "postgresmaestro" : "entrenadoresmaestro";
+
         Properties props = new Properties();
         HikariConfig cfg = new HikariConfig();
 
         props.load(getClass().getClassLoader().getResourceAsStream("application.properties"));
-        dbUrl = props.getProperty("db.url", "jdbc:mysql://localhost:3306/entrenadores_pokemon_hikari?useSSL=false&serverTimezone=UTC");
-        dbName = props.getProperty("db.user", "jdbcentrenadores");
-        dbPass = props.getProperty("db.pass", "entrenadoresmaestro");
+        dbUrl = props.getProperty(urlKey, urlVal);
+        dbUser = props.getProperty(userKey, userVal);
+        dbPass = props.getProperty(passKey, passVal);
 
         cfg.setJdbcUrl(dbUrl);
-        cfg.setUsername(dbName);
+        cfg.setUsername(dbUser);
         cfg.setPassword(dbPass);
         cfg.setMaximumPoolSize(10);
         cfg.setMinimumIdle(1);
@@ -44,18 +64,23 @@ public class PuntoEntrada {
         ServicioEntrenadorImpl servicio;
 
         Consola.mostrarFraseEndl("Elige el repositorio a utilizar:", Colores.VERDE);
-        Consola.mostrarMenu(List.of("Repo XML.", "Repo MySQL.", "Repo JSON.", "Repo MongoDB."));
-        opcionRepo = Escaner.pedirEntero("Introduce tu opcion: ");
+        Consola.mostrarMenu(List.of("Repo XML.", "Repo MySQL.", "Repo JSON.", "Repo MongoDB.", "Repo PostgresSQL"));
         try {
+            opcionRepo = Escaner.pedirEntero("Introduce tu opcion: ");
             switch (opcionRepo) {
                 case 1 -> repo = new RepositorioEntrenadorXML("datos/entrenadores_pokemon.xml");
-                case 2 -> repo = new RepositorioEntrenadorMySQL(createDataSourceForMySQL());
+                case 2 -> repo = new RepositorioEntrenadorMySQL(createDataSourceForSQL(false));
                 case 3 -> repo = new RepositorioEntrenadorJSON("datos/entrenadores_pokemon.json","datos/entrenadores_pokemon.json");
                 case 4 -> repo = new RepositorioEntrenadorMongoDB();
+                case 5 -> repo = new RepositorioEntrenadorPostgres(createDataSourceForSQL(true));
                 default -> Consola.mostrarFraseEndl("Error, repositorio no valido.", Colores.ROJO);
             }
-        } catch (Exception e) {
+        } catch (EntradaUsuarioNoValidaException e) {
             Consola.mostrarExcepcion(e);
+        } catch (RepositorioException e) {
+            Consola.mostrarFraseEndl("Error al crear repositorio.", Colores.ROJO);
+        } catch (IOException e) {
+            Consola.mostrarFraseEndl("Error al configurar entorno para SQL.", Colores.ROJO);
         }
         if (repo != null) {
             servicio = new ServicioEntrenadorImpl(repo);
@@ -78,13 +103,17 @@ public class PuntoEntrada {
             while (!salir) {
                 Consola.mostrarFraseEndl("OPERACIONES: ");
                 Consola.mostrarMenu(List.of("Crear entrenador pokemon.", "Buscar un entrenador pokemon.", "Actualizar datos de entrenador pokemon.", "Borrar entrenador pokemon.", "Salir del programa."));
-                opcion_operacion = Escaner.pedirEntero("Introduce tu opcion: ");
-                switch (opcion_operacion) {
-                    case 1 -> controlador.crearEntrenador();
-                    case 2 -> controlador.buscarEntrenador();
-                    case 3 -> controlador.actualizarEntrenador();
-                    case 4 -> controlador.borrarEntrenador();
-                    case 5 -> salir = true;
+                try {
+                    opcion_operacion = Escaner.pedirEntero("Introduce tu opcion: ");
+                    switch (opcion_operacion) {
+                        case 1 -> controlador.crearEntrenador();
+                        case 2 -> controlador.buscarEntrenador();
+                        case 3 -> controlador.actualizarEntrenador();
+                        case 4 -> controlador.borrarEntrenador();
+                        case 5 -> salir = true;
+                    }
+                } catch (EntradaUsuarioNoValidaException e) {
+                    Consola.mostrarExcepcion(e);
                 }
             }
             Consola.mostrarFraseEndl("Saliendo del programa de forma controlada!", Colores.VERDE);
