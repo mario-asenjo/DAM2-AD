@@ -175,45 +175,34 @@ public class RepositorioEntrenadorXML implements RepositorioEntrenador {
         try {
             documento = cargarDocumento(fichero);
             raiz = documento.getDocumentElement(); // <entrenadores>
-
             entrenadorNode = documento.createElement("entrenador");
             entrenadorNode.setAttribute("id", String.valueOf(entrenador.getId())); // <entrenador id="1">
-
             nombreNode = documento.createElement("nombre");
             nombreNode.appendChild(documento.createTextNode(entrenador.getNombre()));
             entrenadorNode.appendChild(nombreNode); // anexa <nombre> en <entrenador>
-
             puebloNode = documento.createElement("pueblo");
             puebloNode.appendChild(documento.createTextNode(entrenador.getPueblo()));
             entrenadorNode.appendChild(puebloNode); // anexa <pueblo> en <entrenador>
-
             edadNode = documento.createElement("edad");
             edadNode.appendChild(documento.createTextNode(entrenador.getPueblo()));
             entrenadorNode.appendChild(edadNode); // anexa <edad> en <entrenador>
-
             pokemonsNode = documento.createElement("pokemons"); // <pokemons>
             for (int i = 0; i < listaPokemons.size(); i++) {
                 pokemon = listaPokemons.get(i);
-
                 pokemonNode = documento.createElement("pokemon");
                 pokemonNode.setAttribute("id", String.valueOf(pokemon.getId())); // <pokemon id="1">
-
                 pNombreNode = documento.createElement("nombre");
                 pNombreNode.appendChild(documento.createTextNode(pokemon.getNombre()));
                 pokemonNode.appendChild(pNombreNode); // anexa <nombre> en <pokemon>
-
                 especieNode = documento.createElement("especie");
                 especieNode.appendChild(documento.createTextNode(pokemon.getEspecie()));
                 pokemonNode.appendChild(especieNode); // anexa <especie> en <pokemon>
-
                 tipoNode = documento.createElement("tipo");
                 tipoNode.appendChild(documento.createTextNode(pokemon.getTipo()));
                 pokemonNode.appendChild(tipoNode); // anexa <tipo> en <pokemon>
-
                 nivelNode = documento.createElement("nivel");
                 nivelNode.appendChild(documento.createTextNode(String.valueOf(pokemon.getNivel())));
                 pokemonNode.appendChild(nivelNode); // anexa <nivel> en <pokemon>
-
                 pokemonsNode.appendChild(pokemonNode); // anexa todo el <pokemon> creado en <pokemons>
             }
             entrenadorNode.appendChild(pokemonsNode); // anexa todos los <pokemons> en <entrenador>
@@ -256,7 +245,71 @@ public class RepositorioEntrenadorXML implements RepositorioEntrenador {
 
     @Override
     public void actualizar(Entrenador entrenador) throws Exception {
+        Document documento = null;
+        NodeList entrenadoresNode = null;
+        Node nodo = null;
+        Element elemento = null;
+        long idActual = -1;
+        NodeList listaPokemonsNode = null;
+        Element pokemonNode = null;
+        Element nuevoPokemonsNode = null;
+        List<Pokemon> listaPokemons = entrenador.getPokedex().getPokemons_obtenidos();
+        Pokemon pokemon = null;
+        Element nombreNode = null;
+        Element especieNode = null;
+        Element tipoNode = null;
+        Element nivelNode = null;
+        boolean actualizado = false;
 
+        try {
+            documento = cargarDocumento(fichero);
+            entrenadoresNode = documento.getElementsByTagName("entrenador");
+
+            for (int i = 0; i < entrenadoresNode.getLength() && !actualizado; i++) {
+                nodo = entrenadoresNode.item(i);
+                if (nodo.getNodeType() == Node.ELEMENT_NODE) {
+                    elemento = (Element) nodo;
+                    idActual = Long.parseLong(elemento.getAttribute("id"));
+                    if (idActual == entrenador.getId()) {
+                        cambiarTextoHijo(elemento, "nombre", entrenador.getNombre()); // cambia de este elemento la etiqueta <nombre>
+                        cambiarTextoHijo(elemento, "pueblo", entrenador.getPueblo()); // cambia de este elemento la etiqueta <pueblo>
+                        cambiarTextoHijo(elemento, "edad", String.valueOf(entrenador.getEdad())); // cambia de este elemento la etiqueta <edad>
+                        listaPokemonsNode = elemento.getElementsByTagName("pokemons");
+                        elemento.removeChild(listaPokemonsNode.item(0)); // elimina el nodo <pokemons>
+                        nuevoPokemonsNode = documento.createElement("pokemons"); // crea de nuevo el nodo <pokemons>
+                        listaPokemons = entrenador.getPokedex().getPokemons_obtenidos();
+                        if (entrenador.getPokedex() != null && listaPokemons != null) {
+                            for (int j = 0; j < listaPokemons.size(); j++) {
+                                pokemon = listaPokemons.get(j);
+                                pokemonNode = documento.createElement("pokemon"); // crea un nodo <pokemon>
+                                pokemonNode.setAttribute("id", String.valueOf(pokemon.getId()));
+                                nombreNode = documento.createElement("nombre");
+                                nombreNode.appendChild(documento.createTextNode(pokemon.getNombre()));
+                                pokemonNode.appendChild(nombreNode); // anexa el elemento <nombre> al <pokemon>
+                                especieNode = documento.createElement("especie");
+                                especieNode.appendChild(documento.createTextNode(pokemon.getEspecie()));
+                                pokemonNode.appendChild(especieNode); // anexa el elemento <especie> al <pokemon>
+                                tipoNode = documento.createElement("tipo");
+                                tipoNode.appendChild(documento.createTextNode(pokemon.getTipo()));
+                                pokemonNode.appendChild(tipoNode);
+                                nivelNode = documento.createElement("nivel");
+                                nivelNode.appendChild(documento.createTextNode(String.valueOf(pokemon.getNivel())));
+                                pokemonNode.appendChild(nivelNode);
+                                nuevoPokemonsNode.appendChild(pokemonNode);
+                            }
+                        }
+                        elemento.appendChild(nuevoPokemonsNode);
+                        actualizado = true;
+                    }
+                }
+            }
+            if (!actualizado) {
+                throw new Exception("No se ha encontrado el entrenador para actualizar.");
+            }
+            guardarDocumento(documento);
+        } catch (Exception e) {
+            throw new Exception("Error intentando actualizar un entrenador en XML.");
+        }
     }
 
     @Override
