@@ -1,0 +1,4 @@
+Entrega previa:
+- Repositorios corregidos.
+Entrega completa:
+- Todo el flujo, llamadas desde donde deben.
