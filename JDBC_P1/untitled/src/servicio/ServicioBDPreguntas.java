@@ -7,6 +7,7 @@ import utils.DBConnection;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ServicioBDPreguntas {
@@ -20,16 +21,15 @@ public class ServicioBDPreguntas {
         List<Pregunta> retorno;
         String sql;
 
-        sql = "SELECT * FROM preguntas_desordenadas LIMIT ?";
+        sql = "SELECT P_ID, P_ENUNCIADO, O_ID, O_TEXTO, O_OPCION, O_CORRECTA FROM preguntas_desordenadas LIMIT ?;";
         retorno = repo.ejecutarQuery(
                     sql,
                     resultSet -> {
-                        List<Pregunta> listaRetorno = new ArrayList<>();
+                        List<Pregunta> listaRetorno = new LinkedList<>();
                         List<Opcion> opciones;
                         String enunciado;
-                        Long idPregunta;
-                        resultSet.next();
-                        while (!resultSet.isLast()) {
+                        long idPregunta;
+                        while (resultSet.next()) {
                             idPregunta = resultSet.getLong("P_ID");
                             enunciado = resultSet.getString("P_ENUNCIADO");
                             opciones = new ArrayList<>();

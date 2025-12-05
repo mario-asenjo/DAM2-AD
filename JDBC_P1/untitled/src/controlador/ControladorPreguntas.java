@@ -100,7 +100,7 @@ public class ControladorPreguntas {
         char opcion;
         boolean esCorrecta;
 
-        servicioFichero = new ServicioFicheroPreguntas("Data/50preguntasInformatica.txt");
+        servicioFichero = new ServicioFicheroPreguntas("Data/50preguntasAnimales.txt");
         listaPreguntas = new ListaPreguntas();
         try {
             /**

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "
+         http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!-- Conexion a la base de datos -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/videojuegos_bd</property>
+        <property name="hibernate.connection.username">jdbcvideojuegos</property>
+        <property name="hibernate.connection.password">12345</property>
+        <!-- Habilitar el modo de log de Hibernate -->
+        <property name="hibernate.show_sql">true</property>
+        <!-- Para no crear las tablas de forma automática -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <!-- Configuración de la caché -->
+        <property name="hibernate.cache.use_second_level_cache">false</property>
+        <!-- Especifica el tipo de conexión -->
+        <property name="hibernate.c3p0.min_size">5</property>
+        <property name="hibernate.c3p0.max_size">20</property>
+        <property name="hibernate.c3p0.timeout">300</property>
+        <!-- Indica que las entidades deben ser analizadas -->
+        <mapping class="com.masenjo.model.Videojuego"/>
+        <mapping class="com.masenjo.model.Jugador"/>
+    </session-factory>
+</hibernate-configuration>
