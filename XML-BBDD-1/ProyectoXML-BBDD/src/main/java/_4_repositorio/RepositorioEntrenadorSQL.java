@@ -58,7 +58,7 @@ public abstract class RepositorioEntrenadorSQL implements RepositorioEntrenador 
                 }
                 return retorno;
             });
-        } catch (SQLException e) {
+        } catch (SQLException | EntidadNoEncontradaException e) {
             throw new RepositorioException("Error en la lectura de la base de datos al listar entrenadores.", e);
         }
     }
@@ -125,7 +125,7 @@ public abstract class RepositorioEntrenadorSQL implements RepositorioEntrenador 
                 }
                 return entrenador;
             }, id);
-        } catch (SQLException e) {
+        } catch (SQLException | EntidadNoEncontradaException e) {
             throw new RepositorioException("Error durante la busqueda de entrenador por ID en la base de datos", e);
         }
     }
@@ -167,7 +167,7 @@ public abstract class RepositorioEntrenadorSQL implements RepositorioEntrenador 
                 }
                 return entrenador;
             }, nombre);
-        } catch (SQLException e) {
+        } catch (SQLException | EntidadNoEncontradaException e) {
             throw new RepositorioException("Error durante la busqueda de entrenador por nombre en la base de datos.", e);
         }
     }

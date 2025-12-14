@@ -48,13 +48,13 @@ public class Pokedex {
     private String pokemonsToString() {
         StringBuilder sb = new StringBuilder();
         for (Pokemon pokemon : pokemonsObtenidos) {
-            sb.append(pokemon.toString()).append("\n\t");
+            sb.append("\n\t\t").append(pokemon.toString());
         }
         return sb.toString();
     }
 
     @Override
     public String toString() {
-        return String.format("POKEDEX:\n\tCantidad Actual: %d\n\tCapacidad Total: %d\n\tPokemons Obtenidos:\n\t%s", cantidadPokemonsActual, cantidadPokemonsTotales, pokemonsToString());
+        return String.format("POKEDEX:\n\tCantidad Actual: %d\n\tCapacidad Total: %d\n\tPokemons Obtenidos:%s", cantidadPokemonsActual, cantidadPokemonsTotales, pokemonsToString());
     }
 }

@@ -3,13 +3,19 @@
     <entrenador id="1">
         <nombre>Manolo</nombre>
         <pueblo>Paleta</pueblo>
-        <edad>Paleta</edad>
+        <edad>22</edad>
         <pokemons>
             <pokemon id="1">
-                <nombre>Pikachuca</nombre>
-                <especie>Chupamingas</especie>
-                <tipo>RayoGAY</tipo>
+                <nombre>Pikachu</nombre>
+                <especie>Mamifero especial</especie>
+                <tipo>Rayo</tipo>
                 <nivel>20</nivel>
+            </pokemon>
+            <pokemon id="2">
+                <nombre>Pikachu</nombre>
+                <especie>Super Especial</especie>
+                <tipo>Super Rayo</tipo>
+                <nivel>200</nivel>
             </pokemon>
         </pokemons>
     </entrenador>

@@ -26,7 +26,7 @@ public class SQLUtils {
         return (filasAfectadas);
     }
 
-    public <T> T ejecutarQuery(String sql, Mapper<T> mapper, Object... parametros) throws SQLException {
+    public <T> T ejecutarQuery(String sql, Mapper<T> mapper, Object... parametros) throws SQLException, EntidadNoEncontradaException {
         Connection conexion = dataSource.getConnection();
         PreparedStatement stmt = conexion.prepareStatement(sql);
         ResultSet res;
@@ -73,7 +73,7 @@ public class SQLUtils {
         return (filasAfectadas);
     }
 
-    public <T> T ejecutarQuery(Connection conexion, String sql, Mapper<T> mapper, Object... parametros) throws SQLException {
+    public <T> T ejecutarQuery(Connection conexion, String sql, Mapper<T> mapper, Object... parametros) throws SQLException, EntidadNoEncontradaException {
         PreparedStatement stmt = conexion.prepareStatement(sql);
         ResultSet res;
         T retorno;

@@ -64,6 +64,6 @@ public class Entrenador {
 
     @Override
     public String toString() {
-        return String.format("ENTRENADOR -> ID: %d, Nombre: %s, Edad: %d, Pueblo: %s {\n\t%s}", id, nombre, edad, pueblo, pokedex.toString());
+        return String.format("ENTRENADOR -> ID: %d, Nombre: %s, Edad: %d, Pueblo: %s {\n\t%s\n\t}", id, nombre, edad, pueblo, pokedex.toString());
     }
 }
