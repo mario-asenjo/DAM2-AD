@@ -120,6 +120,50 @@ public class ControladorEntrenadorConsola implements ControladorEntrenador {
         }
     }
 
+    @Override
+    public void comunicarConOtroRepositorio(ServicioEntrenador servicioDestino) {
+        Entrenador entrenadorOrigen;
+        int opcionBusqueda;
+
+        Consola.mostrarFraseEndl("##### COMUNICAR REPOSITORIOS (ORIGEN -> DESTINO) #####", Colores.VERDE);
+        try {
+            Consola.mostrarMenu(List.of(
+                    "Buscar en origen por ID.",
+                    "Buscar en origen por nombre."
+            ));
+            opcionBusqueda = Escaner.pedirEntero("Introduce tu opcion: ");
+
+            switch (opcionBusqueda) {
+                case 1 -> {
+                    long id = Escaner.pedirEntero("Introduce el ID a migrar: ");
+                    entrenadorOrigen = servicioEntrenador.buscarEntrenadorPorId(id);
+                }
+                case 2 -> {
+                    String nombre = Escaner.pedirString("Introduce el nombre a migrar: ");
+                    entrenadorOrigen = servicioEntrenador.buscarEntrenadorPorNombre(nombre);
+                }
+                default -> {
+                    Consola.mostrarFraseEndl("Opción de búsqueda no válida.", Colores.ROJO);
+                    return;
+                }
+            }
+
+            servicioDestino.guardarEntrenador(entrenadorOrigen);
+            Consola.mostrarFraseEndl("Entrenador copiado correctamente al repositorio destino.", Colores.VERDE);
+
+        } catch (EntradaUsuarioNoValidaException e) {
+            Consola.mostrarFraseEndl("Error introduciendo datos: " + e.getMessage(), Colores.ROJO);
+        } catch (ApplicationException e) {
+            if (e instanceof IdDuplicadoException) {
+                Consola.mostrarFraseEndl("El entrenador ya existe en el repositorio destino: " + e.getMessage(), Colores.ROJO);
+            } else if (e instanceof EntidadNoEncontradaException) {
+                Consola.mostrarFraseEndl("No se ha encontrado el entrenador en el repositorio origen: " + e.getMessage(), Colores.ROJO);
+            } else {
+                Consola.mostrarFraseEndl("Error en la comunicación de repositorios: " + e.getMessage(), Colores.ROJO);
+            }
+        }
+    }
+
     private Entrenador nuevoEntrenador(boolean actualizar) throws ApplicationException {
         int id = -1;
         String nombre = null;

@@ -1,5 +1,13 @@
 DOMINIO 1-N:
 
+docker run -d --name mysql-pokemon -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=entrenadores_pokemon_hikari -e MYSQL_USER=jdbcentrenadores -e MYSQL_PASSWORD=entrenadoresmaestro -p 3306:3306 mysql:8.0 --default-authentication-plugin=mysql_native_password
+
+docker exec -it mysql-pokemon bash
+
+mysql -u root -p
+
+USE entrenadores_pokemon_hikari;
+
 CREATE TABLE entrenadores (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre        VARCHAR(100) NOT NULL,
@@ -17,10 +25,24 @@ CREATE TABLE pokemons (
     FOREIGN KEY (id_entrenador) REFERENCES entrenadores(id)
 );
 
+// Sirve para ambos!
+DROP VIEW IF EXISTS entrenadores_pokemons;
+
 CREATE VIEW entrenadores_pokemons AS
-SELECT e.id AS E_ID, e.nombre as E_NOMBRE, e.pueblo AS E_PUEBLE, e.edad AS E_EDAD, p.id AS P_ID, p.nombre as P_NOMBRE, p.especie AS P_ESPECIE, p.tipo AS P_TIPO, p.nivel AS P_NIVEL, p.id_entrenador AS P_ID_ENTRENADOR
-FROM entrenadores e INNER JOIN pokemons p
-ON e.id = p.id_entrenador;
+SELECT
+    e.id            AS E_ID,
+    e.nombre        AS E_NOMBRE,
+    e.pueblo        AS E_PUEBLO,
+    e.edad          AS E_EDAD,
+    p.id            AS P_ID,
+    p.nombre        AS P_NOMBRE,
+    p.especie       AS P_ESPECIE,
+    p.tipo          AS P_TIPO,
+    p.nivel         AS P_NIVEL,
+    p.id_entrenador AS P_ID_ENTRENADOR
+FROM entrenadores e
+LEFT JOIN pokemons p ON e.id = p.id_entrenador;
+
 
 ////////////////////////////////
 POSTGRES

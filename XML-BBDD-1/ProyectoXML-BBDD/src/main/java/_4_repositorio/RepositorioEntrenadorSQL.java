@@ -131,7 +131,7 @@ public abstract class RepositorioEntrenadorSQL implements RepositorioEntrenador 
     }
 
     @Override
-    public Entrenador buscarPorNombre(String nombre) throws RepositorioException {
+    public Entrenador buscarPorNombre(String nombre) throws RepositorioException, EntidadNoEncontradaException {
         final String SQL = "SELECT E_ID, E_NOMBRE, E_PUEBLO, E_EDAD, P_ID, P_NOMBRE, P_ESPECIE, P_TIPO, P_NIVEL, P_ID_ENTRENADOR FROM entrenadores_pokemons WHERE E_NOMBRE = ? ORDER BY P_ID;";
 
         try {
@@ -167,7 +167,7 @@ public abstract class RepositorioEntrenadorSQL implements RepositorioEntrenador 
                 }
                 return entrenador;
             }, nombre);
-        } catch (SQLException | EntidadNoEncontradaException e) {
+        } catch (SQLException e) {
             throw new RepositorioException("Error durante la busqueda de entrenador por nombre en la base de datos.", e);
         }
     }

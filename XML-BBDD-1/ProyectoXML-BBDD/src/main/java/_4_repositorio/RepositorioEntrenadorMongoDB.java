@@ -87,7 +87,7 @@ public class RepositorioEntrenadorMongoDB implements RepositorioEntrenador {
     }
 
     private Entrenador entrenadorFromDocument(Document entrenadorDocument) {
-        long id = entrenadorDocument.getInteger("id");
+        long id = entrenadorDocument.getLong("id");
         String nombre = entrenadorDocument.getString("nombre");
         String pueblo = entrenadorDocument.getString("pueblo");
         int edad = entrenadorDocument.getInteger("edad");

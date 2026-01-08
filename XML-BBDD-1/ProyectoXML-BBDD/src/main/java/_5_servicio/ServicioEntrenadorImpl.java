@@ -19,8 +19,12 @@ public class ServicioEntrenadorImpl implements ServicioEntrenador {
     @Override
     public void guardarEntrenador(Entrenador entrenador) throws ApplicationException {
         try {
-            repo.buscarPorId(entrenador.getId());
-            throw new IdDuplicadoException("El entrenador con este ID ya existe.");
+            if (!(repo instanceof RepositorioEntrenadorMySQL)) {
+                repo.buscarPorId(entrenador.getId());
+                throw new IdDuplicadoException("El entrenador con este ID ya existe.");
+            }else {
+                repo.guardar(entrenador);
+            }
         } catch (EntidadNoEncontradaException e) {
             repo.guardar(entrenador);
         }

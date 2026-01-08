@@ -8,6 +8,7 @@ import _4_repositorio.RepositorioEntrenadorJSON;
 import _4_repositorio.RepositorioEntrenadorXML;
 import _4_repositorio.RepositorioEntrenadorPostgres;
 import _4_repositorio.RepositorioEntrenadorMongoDB;
+import _5_servicio.ServicioEntrenador;
 import _5_servicio.ServicioEntrenadorImpl;
 
 import _6_excepciones.EntidadNoEncontradaException;
@@ -31,10 +32,10 @@ public class PuntoEntrada {
         String dbPass;
         String urlKey = postgres ? "db.pg.url" : "db.url";
         String urlVal = postgres
-                ? "jdbc:postgresql://localhost:5432/entrenadores_pokemon"
+                ? "jdbc:postgresql://localhost:5433/entrenadores_pokemon"
                 : "jdbc:mysql://localhost:3306/entrenadores_pokemon_hikari?useSSL=false&serverTimezone=UTC";
         String userKey = postgres ? "db.pg.user" : "db.user";
-        String userVal = postgres ? "postgresuser" : "jdbcentrenadores";
+        String userVal = postgres ? "postgres" : "jdbcentrenadores";
         String passKey = postgres ? "db.pg.pass" : "db.pass";
         String passVal = postgres ? "postgresmaestro" : "entrenadoresmaestro";
 
@@ -56,24 +57,35 @@ public class PuntoEntrada {
         return new HikariDataSource(cfg);
     }
 
+    private RepositorioEntrenador crearRepositorioDesdeOpcion(int opcionRepo)
+            throws RepositorioException, IOException {
+        return switch (opcionRepo) {
+            case 1 -> new RepositorioEntrenadorXML("datos/entrenadores_pokemon.xml");
+            case 2 -> new RepositorioEntrenadorMySQL(createDataSourceForSQL(false));
+            case 3 -> new RepositorioEntrenadorJSON(
+                    "datos/entrenadores_pokemon.json",
+                    "datos/entrenadores_pokemon.json"
+            );
+            case 4 -> new RepositorioEntrenadorMongoDB();
+            case 5 -> new RepositorioEntrenadorPostgres(createDataSourceForSQL(true));
+            default -> null;
+        };
+    }
+
     public PuntoEntrada() {
         int opcionRepo;
         String ficheroEntrada;
         String ficheroSalida;
         RepositorioEntrenador repo = null;
-        ServicioEntrenadorImpl servicio;
+        ServicioEntrenador servicio;
 
         Consola.mostrarFraseEndl("Elige el repositorio a utilizar:", Colores.VERDE);
         Consola.mostrarMenu(List.of("Repo XML.", "Repo MySQL.", "Repo JSON.", "Repo MongoDB.", "Repo PostgresSQL"));
         try {
             opcionRepo = Escaner.pedirEntero("Introduce tu opcion: ");
-            switch (opcionRepo) {
-                case 1 -> repo = new RepositorioEntrenadorXML("datos/entrenadores_pokemon.xml");
-                case 2 -> repo = new RepositorioEntrenadorMySQL(createDataSourceForSQL(false));
-                case 3 -> repo = new RepositorioEntrenadorJSON("datos/entrenadores_pokemon.json","datos/entrenadores_pokemon.json");
-                case 4 -> repo = new RepositorioEntrenadorMongoDB();
-                case 5 -> repo = new RepositorioEntrenadorPostgres(createDataSourceForSQL(true));
-                default -> Consola.mostrarFraseEndl("Error, repositorio no valido.", Colores.ROJO);
+            repo = crearRepositorioDesdeOpcion(opcionRepo);
+            if (repo == null) {
+                Consola.mostrarFraseEndl("Error, repositorio no valido.", Colores.ROJO);
             }
         } catch (EntradaUsuarioNoValidaException e) {
             Consola.mostrarExcepcion(e);
@@ -90,6 +102,32 @@ public class PuntoEntrada {
         }
     }
 
+    private void comunicarConOtroRepositorio() {
+        Consola.mostrarFraseEndl("##### COMUNICAR REPOSITORIOS #####", Colores.VERDE);
+        Consola.mostrarFraseEndl("Elige el repositorio DESTINO:", Colores.VERDE);
+        Consola.mostrarMenu(List.of("Repo XML.", "Repo MySQL.", "Repo JSON.", "Repo MongoDB.", "Repo PostgresSQL"));
+
+        try {
+            int opcionDestino = Escaner.pedirEntero("Introduce tu opcion para repositorio destino: ");
+            RepositorioEntrenador repoDestino = crearRepositorioDesdeOpcion(opcionDestino);
+            if (repoDestino == null) {
+                Consola.mostrarFraseEndl("Repositorio destino no válido.", Colores.ROJO);
+                return;
+            }
+            ServicioEntrenador servicioDestino = new ServicioEntrenadorImpl(repoDestino);
+
+            // Toda la lógica del caso de uso se delega al controlador
+            controlador.comunicarConOtroRepositorio(servicioDestino);
+
+        } catch (EntradaUsuarioNoValidaException e) {
+            Consola.mostrarFraseEndl("Error introduciendo datos: " + e.getMessage(), Colores.ROJO);
+        } catch (RepositorioException e) {
+            Consola.mostrarFraseEndl("Error al crear repositorio destino.", Colores.ROJO);
+        } catch (IOException e) {
+            Consola.mostrarFraseEndl("Error al configurar entorno SQL para el repositorio destino.", Colores.ROJO);
+        }
+    }
+
     public void iniciar() {
         boolean salir;
         int opcion_operacion;
@@ -102,7 +140,7 @@ public class PuntoEntrada {
             Consola.mostrarFraseEndl("##### PROGRAMA DE ENTRENADORES POKEMON #####");
             while (!salir) {
                 Consola.mostrarFraseEndl("OPERACIONES: ");
-                Consola.mostrarMenu(List.of("Crear entrenador pokemon.", "Buscar un entrenador pokemon.", "Actualizar datos de entrenador pokemon.", "Borrar entrenador pokemon.", "Salir del programa."));
+                Consola.mostrarMenu(List.of("Crear entrenador pokemon.", "Buscar un entrenador pokemon.", "Actualizar datos de entrenador pokemon.", "Borrar entrenador pokemon.", "Comunicar con otro repo.", "Salir del programa."));
                 try {
                     opcion_operacion = Escaner.pedirEntero("Introduce tu opcion: ");
                     switch (opcion_operacion) {
@@ -110,7 +148,8 @@ public class PuntoEntrada {
                         case 2 -> controlador.buscarEntrenador();
                         case 3 -> controlador.actualizarEntrenador();
                         case 4 -> controlador.borrarEntrenador();
-                        case 5 -> salir = true;
+                        case 5 -> comunicarConOtroRepositorio();
+                        case 6 -> salir = true;
                     }
                 } catch (EntradaUsuarioNoValidaException e) {
                     Consola.mostrarExcepcion(e);

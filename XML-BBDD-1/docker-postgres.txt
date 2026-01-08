@@ -1,0 +1,45 @@
+docker run -d --name postgres-pokemon -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgresmaestro -e POSTGRES_DB=entrenadores_pokemon -p 5432:5432 postgres:16
+
+docker run -d --name postgres-pokemon -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgresmaestro -e POSTGRES_DB=entrenadores_pokemon -p 5432:5432 postgres:16
+
+-- 1) Tabla ENTRENADORES
+DROP TABLE IF EXISTS pokemons;
+DROP TABLE IF EXISTS entrenadores;
+
+CREATE TABLE entrenadores (
+    id      BIGINT PRIMARY KEY,
+    nombre  VARCHAR(100) NOT NULL,
+    pueblo  VARCHAR(100) NOT NULL,
+    edad    INT NOT NULL
+);
+
+-- 2) Tabla POKEMONS
+CREATE TABLE pokemons (
+    id             INT,
+    nombre         VARCHAR(100) NOT NULL,
+    especie        VARCHAR(100) NOT NULL,
+    tipo           VARCHAR(50)  NOT NULL,
+    nivel          INT          NOT NULL,
+    id_entrenador  BIGINT       NOT NULL,
+    PRIMARY KEY (id, id_entrenador),
+    FOREIGN KEY (id_entrenador) REFERENCES entrenadores(id) ON DELETE CASCADE
+);
+
+-- 3) Vista ENTRENADORES_POKEMONS
+DROP VIEW IF EXISTS entrenadores_pokemons;
+
+CREATE VIEW entrenadores_pokemons AS
+SELECT
+    e.id        AS "E_ID",
+    e.nombre    AS "E_NOMBRE",
+    e.pueblo    AS "E_PUEBLO",
+    e.edad      AS "E_EDAD",
+    p.id        AS "P_ID",
+    p.nombre    AS "P_NOMBRE",
+    p.especie   AS "P_ESPECIE",
+    p.tipo      AS "P_TIPO",
+    p.nivel     AS "P_NIVEL",
+    p.id_entrenador AS "P_ID_ENTRENADOR"
+FROM entrenadores e
+LEFT JOIN pokemons p ON e.id = p.id_entrenador
+ORDER BY e.id, p.id;
