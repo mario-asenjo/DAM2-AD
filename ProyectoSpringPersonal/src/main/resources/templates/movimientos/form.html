@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Formulario Movimiento')"></head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <h1 th:text="${modo == 'crear' ? 'Crear movimiento' : 'Editar movimiento'}"></h1>
+
+    <form th:action="${actionUrl}" method="post" th:object="${movimiento}" class="mt-3">
+          method="post" th:object="${movimiento}" class="mt-3">
+
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input class="form-control" th:field="*{nombre}">
+            <div class="text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Tipo</label>
+            <input class="form-control" th:field="*{tipo}">
+            <div class="text-danger" th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Poder</label>
+            <input type="number" class="form-control" th:field="*{poder}">
+            <div class="text-danger" th:if="${#fields.hasErrors('poder')}" th:errors="*{poder}"></div>
+        </div>
+
+        <button class="btn btn-success" type="submit">Guardar</button>
+        <a class="btn btn-outline-secondary" href="/movimientos">Volver</a>
+    </form>
+</div>
+
+</body>
+</html>

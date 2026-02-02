@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Movimientos')"></head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Movimientos</h1>
+        <a class="btn btn-primary" href="/movimientos/nuevo">Nuevo movimiento</a>
+    </div>
+
+    <table class="table table-bordered align-middle">
+        <thead>
+        <tr>
+            <th>ID</th><th>Nombre</th><th>Tipo</th><th>Poder</th><th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="m : ${movimientos}">
+            <td th:text="${m.id}"></td>
+            <td th:text="${m.nombre}"></td>
+            <td th:text="${m.tipo}"></td>
+            <td th:text="${m.poder}"></td>
+            <td class="d-flex gap-2">
+                <a class="btn btn-sm btn-secondary" th:href="@{/movimientos/{id}/editar(id=${m.id})}">Editar</a>
+                <form th:action="@{/movimientos/{id}/eliminar(id=${m.id})}" method="post">
+                    <button class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar movimiento?');">
+                        Eliminar
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

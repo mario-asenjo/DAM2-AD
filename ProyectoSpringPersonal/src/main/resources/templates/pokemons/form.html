@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Formulario Pokemon')"></head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <h1 th:text="${modo == 'crear' ? 'Crear pokemon' : 'Editar pokemon'}"></h1>
+
+    <form th:action="${actionUrl}" method="post" th:object="${pokemon}" class="mt-3">
+          method="post" th:object="${pokemon}" class="mt-3">
+
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input class="form-control" th:field="*{nombre}">
+            <div class="text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Especie</label>
+            <input class="form-control" th:field="*{especie}">
+            <div class="text-danger" th:if="${#fields.hasErrors('especie')}" th:errors="*{especie}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Tipo</label>
+            <input class="form-control" th:field="*{tipo}">
+            <div class="text-danger" th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Nivel</label>
+            <input type="number" class="form-control" th:field="*{nivel}">
+            <div class="text-danger" th:if="${#fields.hasErrors('nivel')}" th:errors="*{nivel}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Entrenador</label>
+            <select class="form-select" th:field="*{entrenador.id}" required>
+                <option value="" disabled selected>-- Selecciona un entrenador --</option>
+                <option th:each="e : ${entrenadores}"
+                        th:value="${e.id}"
+                        th:text="${e.nombre}">
+                </option>
+            </select>
+            <div class="text-danger" th:if="${#fields.hasErrors('entrenador')}" th:errors="*{entrenador}"></div>
+        </div>
+
+        <button class="btn btn-success" type="submit">Guardar</button>
+        <a class="btn btn-outline-secondary" href="/pokemons">Volver</a>
+    </form>
+</div>
+
+</body>
+</html>

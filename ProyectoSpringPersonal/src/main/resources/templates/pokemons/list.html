@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Pokemons')"></head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Pokemons</h1>
+        <a class="btn btn-primary" href="/pokemons/nuevo">Nuevo pokemon</a>
+    </div>
+
+    <table class="table table-bordered align-middle">
+        <thead>
+        <tr>
+            <th>ID</th><th>Nombre</th><th>Especie</th><th>Tipo</th><th>Nivel</th><th>Entrenador</th><th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${pokemons}">
+            <td th:text="${p.id}"></td>
+            <td th:text="${p.nombre}"></td>
+            <td th:text="${p.especie}"></td>
+            <td th:text="${p.tipo}"></td>
+            <td th:text="${p.nivel}"></td>
+            <td th:text="${p.entrenador.nombre}"></td>
+            <td class="d-flex gap-2 flex-wrap">
+                <a class="btn btn-sm btn-secondary" th:href="@{/pokemons/{id}/editar(id=${p.id})}">Editar</a>
+                <a class="btn btn-sm btn-info" th:href="@{/pokemons/{id}/movimientos(id=${p.id})}">Movimientos</a>
+                <form th:action="@{/pokemons/{id}/eliminar(id=${p.id})}" method="post">
+                    <button class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar pokemon?');">
+                        Eliminar
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Movimientos del Pokemon')"></head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <h1>
+        Movimientos de <span th:text="${pokemon.nombre}"></span>
+        <small class="text-muted">(#<span th:text="${pokemon.id}"></span>)</small>
+    </h1>
+
+    <div class="card mt-3">
+        <div class="card-body">
+            <h5 class="card-title">Añadir movimiento</h5>
+
+            <form th:action="@{/pokemons/{id}/movimientos/anadir(id=${pokemon.id})}" method="post" class="d-flex gap-2">
+                <select class="form-select" name="movimientoId" required>
+                    <option value="" disabled selected>-- Selecciona un movimiento --</option>
+                    <option th:each="m : ${movimientos}"
+                            th:value="${m.id}"
+                            th:text="${m.nombre + ' (' + m.tipo + ', ' + m.poder + ')'}">
+                    </option>
+                </select>
+                <button class="btn btn-primary" type="submit">Añadir</button>
+            </form>
+        </div>
+    </div>
+
+    <h3 class="mt-4">Movimientos actuales</h3>
+    <table class="table table-bordered align-middle">
+        <thead>
+        <tr>
+            <th>Nombre</th><th>Tipo</th><th>Poder</th><th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="m : ${pokemon.movimientos}">
+            <td th:text="${m.nombre}"></td>
+            <td th:text="${m.tipo}"></td>
+            <td th:text="${m.poder}"></td>
+            <td>
+                <form th:action="@{/pokemons/{id}/movimientos/quitar(id=${pokemon.id})}" method="post">
+                    <input type="hidden" name="movimientoId" th:value="${m.id}">
+                    <button class="btn btn-danger btn-sm" type="submit">Quitar</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(pokemon.movimientos)}">
+            <td colspan="4" class="text-center text-muted">Este Pokémon no tiene movimientos aún.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-outline-secondary" href="/pokemons">Volver a Pokemons</a>
+</div>
+
+</body>
+</html>

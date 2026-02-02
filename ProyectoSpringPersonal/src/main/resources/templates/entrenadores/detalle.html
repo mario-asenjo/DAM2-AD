@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Detalle Entrenador')"></head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <h1 th:text="${entrenador.nombre}"></h1>
+    <p class="text-muted">
+        Pueblo: <span th:text="${entrenador.pueblo}"></span> |
+        Edad: <span th:text="${entrenador.edad}"></span>
+    </p>
+
+    <h3 class="mt-4">Pokédex</h3>
+    <table class="table table-bordered align-middle">
+        <thead>
+        <tr>
+            <th>Nombre</th><th>Especie</th><th>Tipo</th><th>Nivel</th><th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${entrenador.pokedex}">
+            <td th:text="${p.nombre}"></td>
+            <td th:text="${p.especie}"></td>
+            <td th:text="${p.tipo}"></td>
+            <td th:text="${p.nivel}"></td>
+            <td class="d-flex gap-2">
+                <a class="btn btn-sm btn-secondary"
+                   th:href="@{/pokemons/{id}/editar(id=${p.id})}">Editar</a>
+                <a class="btn btn-sm btn-info"
+                   th:href="@{/pokemons/{id}/movimientos(id=${p.id})}">Movimientos</a>
+            </td>
+        </tr>
+
+        <tr th:if="${#lists.isEmpty(entrenador.pokedex)}">
+            <td colspan="5" class="text-center text-muted">Este entrenador aún no tiene pokemons.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-outline-secondary" href="/entrenadores">Volver</a>
+</div>
+</body>
+</html>
